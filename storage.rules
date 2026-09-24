@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Phase 0 default: no client uploads or downloads before scoped rules and
+    // their Emulator Suite tests are in place.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Phase 0 default: no client may access data until the tested Phase 2 rules
+    // replace this baseline. Server-side Admin SDK access remains unaffected.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
