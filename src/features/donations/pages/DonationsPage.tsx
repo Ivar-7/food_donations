@@ -15,7 +15,7 @@ export default function DonationsPage() {
   const [category, setCategory] = useState<"All" | "Food" | "Essentials">(
     "All",
   );
-  const { data, isPending, error } = useAvailableDonations();
+  const { data, isPending, error, refetch } = useAvailableDonations();
   const visible =
     data?.filter((item) => category === "All" || item.category === category) ??
     [];
@@ -24,7 +24,7 @@ export default function DonationsPage() {
       <PageHeader
         eyebrow="Community listings"
         title="Available donations"
-        description="Find useful food and supplies shared by neighbors. Donation requests and pickup coordination are planned for a future release."
+        description="Find food and useful supplies shared nearby. Approved organizations can request a listing and coordinate collection."
         action={
           <Link className={primaryClass} to="/donations/new">
             Post a donation
@@ -53,9 +53,29 @@ export default function DonationsPage() {
           dev server.
         </Notice>
       ) : isPending ? (
-        <p role="status">Loading donations…</p>
+        <div
+          role="status"
+          className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+        >
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="h-80 bg-stone-200 motion-safe:animate-pulse dark:bg-stone-800"
+            />
+          ))}
+          <span className="sr-only">Loading donations</span>
+        </div>
       ) : error ? (
-        <Notice error>{toAppError(error).message}</Notice>
+        <div className="space-y-4">
+          <Notice error>{toAppError(error).message}</Notice>
+          <button
+            type="button"
+            onClick={() => void refetch()}
+            className="text-sm font-bold text-forest-700 underline dark:text-forest-500"
+          >
+            Try again
+          </button>
+        </div>
       ) : visible.length ? (
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {visible.map((item) => (
@@ -64,10 +84,18 @@ export default function DonationsPage() {
         </div>
       ) : (
         <EmptyState
-          title="No donations here yet"
-          description="As neighbors share food and supplies, their listings will appear here."
-          action="Post the first donation"
-          href="/donations/new"
+          title={
+            data?.length
+              ? "No matches in this category"
+              : "No donations here yet"
+          }
+          description={
+            data?.length
+              ? "Try another category to see more listings."
+              : "As neighbors share food and supplies, their listings will appear here."
+          }
+          action={data?.length ? undefined : "Post the first donation"}
+          href={data?.length ? undefined : "/donations/new"}
         />
       )}
     </div>

@@ -1,148 +1,95 @@
-import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, MapPin, PackageCheck } from "lucide-react";
 import { useAuth } from "../../../app/authContext";
 import { createDonation } from "../api/donations.api";
 import { donationsKeys } from "../state/donations.keys";
-import { validateDonation } from "../donation.schema";
-import { toAppError } from "../../../shared/errors/appError";
-import {
-  fieldClass,
-  Notice,
-  PageHeader,
-  primaryClass,
-} from "../../../shared/ui/Elements";
+import type { DonationFormValues } from "../donation.types";
+import DonationForm from "../components/DonationForm";
+import { PageHeader } from "../../../shared/ui/Elements";
+
+const emptyDonationForm: DonationFormValues = {
+  title: "",
+  category: "Food",
+  quantity: "",
+  location: "",
+  description: "",
+};
 
 export default function NewDonationPage() {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
   const client = useQueryClient();
-  const [form, setForm] = useState({
-    title: "",
-    category: "Food" as "Food" | "Essentials",
-    quantity: "",
-    location: "",
-    description: "",
-  });
-  const [error, setError] = useState("");
-  const [pending, setPending] = useState(false);
-  async function submit(event: FormEvent) {
-    event.preventDefault();
-    const validation = validateDonation(form);
-    if (validation) {
-      setError(validation);
-      return;
-    }
-    if (!user) return;
-    setPending(true);
-    setError("");
-    try {
-      await createDonation({
-        ...form,
-        title: form.title.trim(),
-        quantity: form.quantity.trim(),
-        location: form.location.trim(),
-        description: form.description.trim(),
-        donorId: user.uid,
-        donorName: profile?.username ?? user.displayName ?? "Community donor",
-      });
-      await client.invalidateQueries({ queryKey: donationsKeys.all });
-      navigate("/dashboard", {
-        state: { success: "Your donation is now listed." },
-      });
-    } catch (cause) {
-      setError(toAppError(cause).message);
-    } finally {
-      setPending(false);
-    }
+
+  async function submit(values: DonationFormValues) {
+    if (!user) throw new Error("Sign in to post a donation.");
+    const id = await createDonation(
+      values,
+      user.uid,
+      profile?.username ?? user.displayName ?? "Community donor",
+    );
+    await client.invalidateQueries({ queryKey: donationsKeys.all });
+    navigate(`/donations/${id}`, {
+      state: { success: "Your donation is now listed." },
+    });
   }
+
   return (
     <div className="w-full px-4 py-12 sm:px-8 lg:px-12 lg:py-16 2xl:px-20">
+      <Link
+        to="/donations"
+        className="mb-9 inline-flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300 dark:hover:text-forest-400"
+      >
+        <ArrowLeft size={16} aria-hidden="true" /> Back to donations
+      </Link>
       <PageHeader
         eyebrow="Share with your community"
         title="Post a donation"
-        description="Tell local organizations what is available and where it can be picked up."
+        description="Give local organizations the details they need to plan a pickup."
       />
-      <form
-        onSubmit={(event) => void submit(event)}
-        className="max-w-4xl space-y-5 border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:p-10"
-      >
-        <label className="block text-sm font-semibold">
-          What are you donating?
-          <input
-            required
-            maxLength={100}
-            className={`${fieldClass} mt-2`}
-            placeholder="Fresh vegetables"
-            value={form.title}
-            onChange={(event) =>
-              setForm({ ...form, title: event.target.value })
-            }
+      <div className="grid gap-8 xl:grid-cols-12 xl:gap-14">
+        <aside className="xl:col-span-4">
+          <div className="border-l-4 border-forest-600 pl-6">
+            <p className="font-display text-2xl leading-snug sm:text-3xl">
+              A clear listing helps good things reach the right place faster.
+            </p>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+              Be specific about the amount, condition, and general pickup area.
+              You can edit or remove your listing until an organization requests
+              it.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+            <div className="flex gap-3 border-t border-stone-200 pt-4 dark:border-stone-800">
+              <PackageCheck
+                className="shrink-0 text-forest-600 dark:text-forest-500"
+                size={20}
+                aria-hidden="true"
+              />
+              <p className="text-sm text-stone-600 dark:text-stone-400">
+                Include what someone will collect and how much is available.
+              </p>
+            </div>
+            <div className="flex gap-3 border-t border-stone-200 pt-4 dark:border-stone-800">
+              <MapPin
+                className="shrink-0 text-forest-600 dark:text-forest-500"
+                size={20}
+                aria-hidden="true"
+              />
+              <p className="text-sm text-stone-600 dark:text-stone-400">
+                Use a neighborhood or area rather than a private address.
+              </p>
+            </div>
+          </div>
+        </aside>
+        <div className="xl:col-span-8">
+          <DonationForm
+            initialValues={emptyDonationForm}
+            submitLabel="Publish donation"
+            onSubmit={submit}
           />
-        </label>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <label className="block text-sm font-semibold">
-            Category
-            <select
-              className={`${fieldClass} mt-2`}
-              value={form.category}
-              onChange={(event) =>
-                setForm({
-                  ...form,
-                  category: event.target.value as "Food" | "Essentials",
-                })
-              }
-            >
-              <option>Food</option>
-              <option>Essentials</option>
-            </select>
-          </label>
-          <label className="block text-sm font-semibold">
-            Quantity
-            <input
-              required
-              maxLength={80}
-              className={`${fieldClass} mt-2`}
-              placeholder="3 boxes"
-              value={form.quantity}
-              onChange={(event) =>
-                setForm({ ...form, quantity: event.target.value })
-              }
-            />
-          </label>
         </div>
-        <label className="block text-sm font-semibold">
-          Pickup area
-          <input
-            required
-            maxLength={120}
-            className={`${fieldClass} mt-2`}
-            placeholder="Westlands, Nairobi"
-            value={form.location}
-            onChange={(event) =>
-              setForm({ ...form, location: event.target.value })
-            }
-          />
-        </label>
-        <label className="block text-sm font-semibold">
-          Description
-          <textarea
-            required
-            rows={5}
-            maxLength={1000}
-            className={`${fieldClass} mt-2`}
-            placeholder="Describe the items, condition, and pickup details."
-            value={form.description}
-            onChange={(event) =>
-              setForm({ ...form, description: event.target.value })
-            }
-          />
-        </label>
-        {error && <Notice error>{error}</Notice>}
-        <button disabled={pending} className={primaryClass} type="submit">
-          {pending ? "Posting…" : "Publish donation"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

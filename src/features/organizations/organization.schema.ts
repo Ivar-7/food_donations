@@ -11,11 +11,17 @@ export function validateOrganizationApplication(data: {
 }): string | null {
   if (
     data.name.trim().length < 3 ||
+    data.name.trim().length > 120 ||
     data.location.trim().length < 2 ||
-    data.description.trim().length < 20
+    data.location.trim().length > 120 ||
+    data.description.trim().length < 20 ||
+    data.description.trim().length > 1500
   )
     return "Complete every field. The description needs at least 20 characters.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contactEmail.trim()))
+  if (
+    data.contactEmail.trim().length > 254 ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contactEmail.trim())
+  )
     return "Enter a valid contact email.";
   return null;
 }
@@ -58,7 +64,11 @@ export function parseOrganizationApplication(
     typeof data.contactEmail !== "string" ||
     !["pending", "approved", "rejected"].includes(String(data.status)) ||
     typeof data.createdAt !== "number" ||
-    !Number.isFinite(data.createdAt)
+    !Number.isFinite(data.createdAt) ||
+    (data.reviewedAt !== undefined &&
+      (typeof data.reviewedAt !== "number" ||
+        !Number.isFinite(data.reviewedAt))) ||
+    (data.reviewerId !== undefined && typeof data.reviewerId !== "string")
   )
     throw new Error("Invalid organization application data");
   return {
@@ -71,5 +81,11 @@ export function parseOrganizationApplication(
     contactEmail: data.contactEmail,
     status: data.status as OrganizationApplication["status"],
     createdAt: data.createdAt,
+    ...(typeof data.reviewedAt === "number" && {
+      reviewedAt: data.reviewedAt,
+    }),
+    ...(typeof data.reviewerId === "string" && {
+      reviewerId: data.reviewerId,
+    }),
   };
 }

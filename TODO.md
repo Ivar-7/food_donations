@@ -21,37 +21,37 @@
 - [x] Loading/empty/error states on all auth forms
 
 ## Phase 2 — Donations
-- [ ] Post-donation form (validated) → donations collection
-- [ ] Donation list + detail view
-- [ ] Edit/delete own donation while status: available
-- [ ] Firestore rules: only poster can edit/delete while available
-- [ ] Home page: available-donations feed
-- [ ] Loading/empty/success/error states
+- [x] Post-donation form (validated) → donations collection
+- [x] Donation list + detail view
+- [x] Edit/delete own donation while status: available
+- [x] Firestore rules: only poster can edit/delete while available
+- [x] Home page: available-donations feed
+- [x] Loading/empty/success/error states
 
 ## Phase 3 — Organizations
-- [ ] Org application form → organizationApplications
-- [ ] Applicant status view (pending/approved/rejected)
-- [ ] Admin approvals dashboard (list pending, approve/reject)
-- [ ] On approve: create organizations doc, set ownerUserId, set organizationId on applicant's user
-- [ ] Firestore rules: only admin approves; only linked user acts as org
-- [ ] Home page: shelters/orgs section
-- [ ] Notification on application status change
-- [ ] Loading/empty/success/error states
+- [x] Org application form → organizationApplications
+- [x] Applicant status view (pending/approved/rejected)
+- [x] Admin approvals dashboard (list pending, approve/reject)
+- [x] On approve: create organizations doc, set ownerUserId, set organizationId on applicant's user
+- [x] Firestore rules: only admin approves; only linked user acts as org
+- [x] Home page: shelters/orgs section
+- [x] Notification on application status change
+- [x] Loading/empty/success/error states
 
 ## Phase 4 — Orders & Sponsorships
-- [ ] Org requests a donation → Firestore transaction reserves it (available → requested), prevents double-claim
-- [ ] Generate pickup code on order creation
-- [ ] Donor marks handoff complete; org confirms receipt; order closes (pickup → received)
-- [ ] Org posts a sponsorship need; users pledge; track fulfillment status
-- [ ] Notifications for order and sponsorship events
-- [ ] Firestore rules + required indexes for orders/sponsorships, deploy
-- [ ] Loading/empty/success/error states
+- [x] Org requests a donation → Firestore transaction reserves it (available → requested), prevents double-claim
+- [x] Generate pickup code on order creation
+- [x] Donor marks handoff complete; org confirms receipt; order closes (pickup → received)
+- [x] Org posts a sponsorship need; users pledge; track fulfillment status
+- [x] Notifications for order and sponsorship events
+- [x] Firestore rules + required indexes for orders/sponsorships, deploy
+- [x] Loading/empty/success/error states
 
 ## Phase 5 — Polish (no new features)
-- [ ] Home page impact totals (simple aggregate reads/counters — no stats pipeline)
-- [ ] Notifications center UI: bell, list, mark-read
-- [ ] Light/dark audit across every screen, Tailwind.
-- [ ] Motion pass: page transitions + interactive feedback only (no decorative animation)
-- [ ] State audit: confirm loading/empty/success/error exist in every feature
-- [ ] Minimal README per feature folder
-- [ ] Final format / lint / typecheck / build clean run
+- [x] Home page impact totals (simple aggregate reads/counters — no stats pipeline)
+- [x] Notifications center UI: bell, list, mark-read
+- [x] Light/dark audit across every screen, Tailwind.
+- [x] Motion pass: page transitions + interactive feedback only (no decorative animation)
+- [x] State audit: confirm loading/empty/success/error exist in every feature
+- [x] Minimal README per feature folder
+- [x] Final format / lint / typecheck / build clean run

@@ -9,4 +9,10 @@ export type Donation = {
   donorId: string;
   donorName: string;
   createdAt: number;
+  orderId?: string;
 };
+
+export type DonationFormValues = Pick<
+  Donation,
+  "title" | "category" | "quantity" | "location" | "description"
+>;

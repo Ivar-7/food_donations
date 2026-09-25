@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { ArrowUpRight, Menu, Moon, Sprout, Sun, X } from "lucide-react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Suspense, useState } from "react";
+import { ArrowUpRight, Bell, Menu, Moon, Sprout, Sun, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
 import { useTheme } from "./themeContext";
 import { logOut } from "../features/auth/api/auth.api";
+import { useNotifications } from "../features/notifications/state/useNotifications";
 import { toAppError } from "../shared/errors/appError";
 import { Notice, primaryClass } from "../shared/ui/Elements";
 
 const nav = [
   { to: "/donations", label: "Explore donations" },
   { to: "/organizations", label: "Organizations" },
+  { to: "/sponsorships", label: "Community needs" },
   { to: "/about", label: "How it works" },
 ];
 
@@ -31,7 +34,12 @@ function Brand() {
 }
 
 export default function AppLayout() {
-  const { user } = useAuth();
+  const { pathname } = useLocation();
+  const reduceMotion = useReducedMotion();
+  const { user, profile } = useAuth();
+  const notifications = useNotifications(user?.uid);
+  const unreadCount =
+    notifications.data?.filter((item) => item.readAt === null).length ?? 0;
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -56,7 +64,7 @@ export default function AppLayout() {
           <Brand />
           <nav
             aria-label="Main navigation"
-            className="hidden items-center gap-8 xl:flex xl:gap-10"
+            className="hidden items-center gap-8 2xl:flex"
           >
             {nav.map((item) => (
               <NavLink key={item.to} to={item.to} className={navClass}>
@@ -64,17 +72,30 @@ export default function AppLayout() {
               </NavLink>
             ))}
           </nav>
-          <div className="hidden items-center gap-5 xl:flex">
-            <button
+          <div className="hidden items-center gap-5 2xl:flex">
+            <motion.button
               type="button"
               onClick={toggleTheme}
+              whileTap={reduceMotion ? undefined : { scale: 0.94 }}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
               className="rounded-full p-2 text-stone-600 transition-colors hover:bg-stone-200 dark:text-stone-300 dark:hover:bg-stone-800"
             >
               {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
-            </button>
+            </motion.button>
             {user ? (
               <>
+                <Link
+                  to="/notifications"
+                  aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}
+                  className="relative rounded-full p-2 text-stone-600 hover:bg-stone-200 dark:text-stone-300 dark:hover:bg-stone-800"
+                >
+                  <Bell size={19} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-forest-700 text-xs font-bold text-white">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </Link>
                 <Link to="/dashboard" className={navClass({ isActive: false })}>
                   Dashboard
                 </Link>
@@ -84,7 +105,7 @@ export default function AppLayout() {
                 <button
                   type="button"
                   onClick={() => void handleLogout()}
-                  className="text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300"
+                  className="text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300 dark:hover:text-forest-400"
                 >
                   Sign out
                 </button>
@@ -102,32 +123,48 @@ export default function AppLayout() {
               <ArrowUpRight size={16} aria-hidden="true" />
             </Link>
           </div>
-          <div className="flex items-center gap-2 xl:hidden">
-            <button
+          <div className="flex items-center gap-2 2xl:hidden">
+            {user && (
+              <Link
+                to="/notifications"
+                aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}
+                className="relative rounded-full p-2.5 text-stone-700 dark:text-stone-200"
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-forest-700 text-xs font-bold text-white">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
+            <motion.button
               type="button"
               onClick={toggleTheme}
+              whileTap={reduceMotion ? undefined : { scale: 0.94 }}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
               className="rounded-full p-2.5 text-stone-700 dark:text-stone-200"
             >
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
+              whileTap={reduceMotion ? undefined : { scale: 0.94 }}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               className="rounded-full border border-stone-300 p-2.5 text-forest-800 dark:border-stone-700 dark:text-stone-100"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            </motion.button>
           </div>
         </div>
         {menuOpen && (
           <nav
             id="mobile-menu"
             aria-label="Mobile navigation"
-            className="border-t border-stone-200 bg-stone-50 px-4 pb-5 pt-3 dark:border-stone-800 dark:bg-forest-950 sm:px-8 xl:hidden"
+            className="border-t border-stone-200 bg-stone-50 px-4 pb-5 pt-3 dark:border-stone-800 dark:bg-forest-950 sm:px-8 2xl:hidden"
           >
             <div className="flex flex-col gap-1">
               {nav.map((item) => (
@@ -156,6 +193,29 @@ export default function AppLayout() {
                   >
                     My profile
                   </NavLink>
+                  <NavLink
+                    to="/orders"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                  >
+                    Donation requests
+                  </NavLink>
+                  <NavLink
+                    to="/notifications"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                  >
+                    Notifications{unreadCount > 0 ? ` (${unreadCount})` : ""}
+                  </NavLink>
+                  {profile?.role === "admin" && (
+                    <NavLink
+                      to="/admin/applications"
+                      onClick={() => setMenuOpen(false)}
+                      className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                    >
+                      Review applications
+                    </NavLink>
+                  )}
                   <button
                     type="button"
                     onClick={() => void handleLogout()}
@@ -190,9 +250,29 @@ export default function AppLayout() {
           </div>
         )}
       </header>
-      <main className="flex-1">
-        <Outlet />
-      </main>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={pathname}
+          className="flex-1"
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: reduceMotion ? 0 : -4 }}
+          transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
+        >
+          <Suspense
+            fallback={
+              <div
+                role="status"
+                className="w-full px-4 py-16 sm:px-8 lg:px-12 2xl:px-20"
+              >
+                Loading page…
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
+        </motion.main>
+      </AnimatePresence>
       <footer className="border-t border-stone-200 bg-stone-100 dark:border-stone-800 dark:bg-forest-950">
         <div className="grid gap-8 px-4 py-10 sm:px-8 md:grid-cols-2 lg:px-12 2xl:px-20">
           <div>
@@ -203,18 +283,33 @@ export default function AppLayout() {
             </p>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-stone-600 dark:text-stone-300 md:justify-end">
-            <Link to="/donations" className="hover:text-forest-700">
+            <Link
+              to="/donations"
+              className="hover:text-forest-700 dark:hover:text-forest-400"
+            >
               Explore donations
             </Link>
-            <Link to="/organizations" className="hover:text-forest-700">
+            <Link
+              to="/organizations"
+              className="hover:text-forest-700 dark:hover:text-forest-400"
+            >
               Organizations
             </Link>
-            <Link to="/about" className="hover:text-forest-700">
+            <Link
+              to="/sponsorships"
+              className="hover:text-forest-700 dark:hover:text-forest-400"
+            >
+              Community needs
+            </Link>
+            <Link
+              to="/about"
+              className="hover:text-forest-700 dark:hover:text-forest-400"
+            >
               How it works
             </Link>
           </div>
         </div>
-        <div className="border-t border-stone-200 px-4 py-5 text-xs text-stone-500 dark:border-stone-800 sm:px-8 lg:px-12 2xl:px-20">
+        <div className="border-t border-stone-200 px-4 py-5 text-xs text-stone-500 dark:border-stone-800 dark:text-stone-400 sm:px-8 lg:px-12 2xl:px-20">
           © {new Date().getFullYear()} FoodBridge. Made for communities that
           share.
         </div>

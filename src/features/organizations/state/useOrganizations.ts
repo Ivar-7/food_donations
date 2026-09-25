@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { firebaseConfigured } from "../../../shared/firebase/client";
-import { getMyApplications, getOrganizations } from "../api/organizations.api";
+import {
+  getMyApplications,
+  getOrganizations,
+  getPendingApplications,
+} from "../api/organizations.api";
 import { organizationsKeys } from "./organizations.keys";
 
 export function useOrganizations() {
@@ -16,5 +20,13 @@ export function useMyApplications(userId: string | undefined) {
     queryKey: organizationsKeys.applications(userId ?? ""),
     queryFn: () => getMyApplications(userId!),
     enabled: Boolean(userId) && firebaseConfigured,
+  });
+}
+
+export function usePendingApplications(enabled: boolean) {
+  return useQuery({
+    queryKey: organizationsKeys.pendingApplications,
+    queryFn: getPendingApplications,
+    enabled: enabled && firebaseConfigured,
   });
 }

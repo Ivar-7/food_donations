@@ -28,10 +28,12 @@ export default function AboutPage() {
       <div className="mt-8 border border-stone-200 bg-white p-8 dark:border-stone-800 dark:bg-stone-900 lg:p-12">
         <h2 className="text-xl font-bold">What happens next</h2>
         <p className="mt-3 leading-relaxed text-stone-600 dark:text-stone-300">
-          Donation requests, pickup handoffs, sponsorship pledges, and
-          notifications are planned for future releases. FoodBridge currently
-          records listings and organization applications; it does not process
-          payments or arrange delivery.
+          An approved organization can reserve an available donation. The donor
+          confirms handoff, then the organization confirms receipt. A pickup
+          reference keeps both sides on the same request, and notifications
+          track each step. Organizations can also post in-kind needs for
+          neighbors to pledge toward. FoodBridge does not process payments or
+          arrange delivery.
         </p>
         <Link to="/donations" className={`${primaryClass} mt-6`}>
           Browse donations

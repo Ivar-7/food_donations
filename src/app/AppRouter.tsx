@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, useEffect } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -17,11 +17,34 @@ const DonationsPage = lazy(
 const NewDonationPage = lazy(
   () => import("../features/donations/pages/NewDonationPage"),
 );
+const DonationDetailPage = lazy(
+  () => import("../features/donations/pages/DonationDetailPage"),
+);
+const EditDonationPage = lazy(
+  () => import("../features/donations/pages/EditDonationPage"),
+);
 const OrganizationsPage = lazy(
   () => import("../features/organizations/pages/OrganizationsPage"),
 );
 const ApplyPage = lazy(
   () => import("../features/organizations/pages/ApplyPage"),
+);
+const AdminApplicationsPage = lazy(
+  () => import("../features/organizations/pages/AdminApplicationsPage"),
+);
+const OrdersPage = lazy(() => import("../features/orders/pages/OrdersPage"));
+const OrderPage = lazy(() => import("../features/orders/pages/OrderPage"));
+const SponsorshipsPage = lazy(
+  () => import("../features/sponsorships/pages/SponsorshipsPage"),
+);
+const NewSponsorshipPage = lazy(
+  () => import("../features/sponsorships/pages/NewSponsorshipPage"),
+);
+const SponsorshipPage = lazy(
+  () => import("../features/sponsorships/pages/SponsorshipPage"),
+);
+const NotificationsPage = lazy(
+  () => import("../features/notifications/pages/NotificationsPage"),
 );
 const AuthPage = lazy(() => import("../features/auth/pages/AuthPage"));
 const ProfilePage = lazy(() => import("../features/auth/pages/ProfilePage"));
@@ -54,65 +77,118 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense
-        fallback={<div className="mx-auto max-w-7xl px-4 py-16">Loading…</div>}
-      >
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/donations" element={<DonationsPage />} />
-            <Route
-              path="/donations/new"
-              element={
-                <Protected>
-                  <NewDonationPage />
-                </Protected>
-              }
-            />
-            <Route path="/organizations" element={<OrganizationsPage />} />
-            <Route
-              path="/organizations/apply"
-              element={
-                <Protected>
-                  <ApplyPage />
-                </Protected>
-              }
-            />
-            <Route path="/login" element={<AuthPage mode="login" />} />
-            <Route path="/signup" element={<AuthPage mode="signup" />} />
-            <Route
-              path="/profile"
-              element={
-                <Protected>
-                  <ProfilePage />
-                </Protected>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <Protected>
-                  <DashboardPage />
-                </Protected>
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <div className="mx-auto max-w-4xl px-4 py-16">
-                  <EmptyState
-                    title="Page not found"
-                    description="The page you requested does not exist."
-                    action="Go home"
-                    href="/"
-                  />
-                </div>
-              }
-            />
-          </Route>
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/donations" element={<DonationsPage />} />
+          <Route
+            path="/donations/:donationId"
+            element={<DonationDetailPage />}
+          />
+          <Route
+            path="/donations/:donationId/edit"
+            element={
+              <Protected>
+                <EditDonationPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/donations/new"
+            element={
+              <Protected>
+                <NewDonationPage />
+              </Protected>
+            }
+          />
+          <Route path="/organizations" element={<OrganizationsPage />} />
+          <Route
+            path="/admin/applications"
+            element={
+              <Protected>
+                <AdminApplicationsPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/organizations/apply"
+            element={
+              <Protected>
+                <ApplyPage />
+              </Protected>
+            }
+          />
+          <Route path="/login" element={<AuthPage mode="login" />} />
+          <Route path="/signup" element={<AuthPage mode="signup" />} />
+          <Route
+            path="/orders"
+            element={
+              <Protected>
+                <OrdersPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/orders/:orderId"
+            element={
+              <Protected>
+                <OrderPage />
+              </Protected>
+            }
+          />
+          <Route path="/sponsorships" element={<SponsorshipsPage />} />
+          <Route
+            path="/sponsorships/new"
+            element={
+              <Protected>
+                <NewSponsorshipPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/sponsorships/:sponsorshipId"
+            element={<SponsorshipPage />}
+          />
+          <Route
+            path="/notifications"
+            element={
+              <Protected>
+                <NotificationsPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Protected>
+                <ProfilePage />
+              </Protected>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Protected>
+                <DashboardPage />
+              </Protected>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <div className="mx-auto max-w-4xl px-4 py-16">
+                <EmptyState
+                  title="Page not found"
+                  description="The page you requested does not exist."
+                  action="Go home"
+                  href="/"
+                />
+              </div>
+            }
+          />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

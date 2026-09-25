@@ -17,4 +17,6 @@ export type OrganizationApplication = {
   contactEmail: string;
   status: "pending" | "approved" | "rejected";
   createdAt: number;
+  reviewedAt?: number;
+  reviewerId?: string;
 };

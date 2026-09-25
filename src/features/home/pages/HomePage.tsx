@@ -1,8 +1,17 @@
-import { ArrowRight, ArrowUpRight, Heart, Leaf, MapPin } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
+  Heart,
+  Leaf,
+  MapPin,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import communityTable from "../../../assets/community-table.webp";
 import { useAvailableDonations } from "../../donations/state/useDonations";
 import DonationCard from "../../donations/components/DonationCard";
+import { useOrganizations } from "../../organizations/state/useOrganizations";
+import ImpactSection from "../components/ImpactSection";
 import { firebaseConfigured } from "../../../shared/firebase/client";
 import { toAppError } from "../../../shared/errors/appError";
 import {
@@ -35,6 +44,7 @@ const steps = [
 
 export default function HomePage() {
   const { data, isPending, error } = useAvailableDonations();
+  const organizations = useOrganizations();
 
   return (
     <>
@@ -67,13 +77,25 @@ export default function HomePage() {
             </div>
             <div className="mt-12 flex flex-wrap gap-x-6 gap-y-3 border-t border-stone-300 pt-6 text-xs font-semibold uppercase tracking-wide text-stone-500 dark:border-stone-700 dark:text-stone-400">
               <span className="flex items-center gap-2">
-                <Leaf size={16} className="text-forest-600" /> Less waste
+                <Leaf
+                  size={16}
+                  className="text-forest-600 dark:text-forest-500"
+                />{" "}
+                Less waste
               </span>
               <span className="flex items-center gap-2">
-                <MapPin size={16} className="text-forest-600" /> Local sharing
+                <MapPin
+                  size={16}
+                  className="text-forest-600 dark:text-forest-500"
+                />{" "}
+                Local sharing
               </span>
               <span className="flex items-center gap-2">
-                <Heart size={16} className="text-forest-600" /> More care
+                <Heart
+                  size={16}
+                  className="text-forest-600 dark:text-forest-500"
+                />{" "}
+                More care
               </span>
             </div>
           </div>
@@ -95,6 +117,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <ImpactSection />
 
       <section className="grid gap-10 border-b border-stone-200 px-4 py-20 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-28 2xl:px-20 dark:border-stone-800">
         <div className="lg:col-span-5">
@@ -170,7 +194,7 @@ export default function HomePage() {
             {[1, 2, 3].map((item) => (
               <div
                 key={item}
-                className="h-72 animate-pulse bg-stone-100 dark:bg-stone-800"
+                className="h-72 bg-stone-100 motion-safe:animate-pulse dark:bg-stone-800"
               />
             ))}
             <span className="sr-only">Loading donations</span>
@@ -193,6 +217,81 @@ export default function HomePage() {
         )}
       </section>
 
+      <section className="border-t border-stone-200 bg-stone-50 px-4 py-20 sm:px-8 lg:px-12 lg:py-28 2xl:px-20 dark:border-stone-800 dark:bg-forest-950">
+        <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+              Local partners
+            </p>
+            <h2 className="mt-4 font-display text-4xl tracking-tight sm:text-5xl">
+              People putting care to work.
+            </h2>
+            <p className="mt-3 max-w-2xl text-stone-600 dark:text-stone-400">
+              Meet approved shelters and NGOs sharing resources across the
+              community.
+            </p>
+          </div>
+          <Link
+            to="/organizations"
+            className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+          >
+            Meet our partners <ArrowUpRight size={17} />
+          </Link>
+        </div>
+        {!firebaseConfigured ? (
+          <Notice error>
+            Firebase is not configured. Add the public configuration to .env to
+            load organizations.
+          </Notice>
+        ) : organizations.isPending ? (
+          <div
+            role="status"
+            className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3"
+          >
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="h-52 bg-stone-200 motion-safe:animate-pulse dark:bg-stone-800"
+              />
+            ))}
+            <span className="sr-only">Loading organizations</span>
+          </div>
+        ) : organizations.error ? (
+          <Notice error>{toAppError(organizations.error).message}</Notice>
+        ) : organizations.data?.length ? (
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {organizations.data.slice(0, 3).map((item) => (
+              <article
+                key={item.id}
+                className="border border-stone-200 bg-white p-7 dark:border-stone-800 dark:bg-stone-900"
+              >
+                <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                  <Building2 size={22} />
+                </span>
+                <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                  {item.type}
+                </p>
+                <h3 className="mt-2 font-display text-2xl">{item.name}</h3>
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                  {item.description}
+                </p>
+                <p className="mt-5 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+                  <MapPin size={16} />
+                  {item.location}
+                </p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Partner directory is growing"
+            description="Approved shelters and NGOs will appear here as they join."
+            action="Apply as an organization"
+            href="/organizations/apply"
+          />
+        )}
+      </section>
+
       <section className="bg-forest-800 px-4 py-16 text-white sm:px-8 lg:px-12 lg:py-20 2xl:px-20 dark:bg-forest-900">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -205,7 +304,7 @@ export default function HomePage() {
           </div>
           <Link
             to="/signup"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3.5 text-sm font-bold text-forest-800 transition-colors hover:bg-forest-50 dark:bg-forest-100"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3.5 text-sm font-bold text-forest-800 transition-colors hover:bg-forest-50 dark:bg-forest-100 dark:hover:bg-white"
           >
             Get started <ArrowUpRight size={17} />
           </Link>

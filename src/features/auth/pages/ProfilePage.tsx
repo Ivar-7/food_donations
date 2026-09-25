@@ -80,7 +80,7 @@ function ProfileForm({
               {user.email ?? "No email available"}
             </span>
           </div>
-          <p className="mt-2 text-xs text-stone-500">
+          <p className="mt-2 text-xs text-stone-500 dark:text-stone-400">
             Email changes are not available in this version.
           </p>
         </div>

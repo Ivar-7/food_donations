@@ -43,14 +43,14 @@ export default function OrganizationsPage() {
               <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
                 <Building2 size={26} strokeWidth={1.6} aria-hidden="true" />
               </div>
-              <span className="text-xs font-bold uppercase tracking-widest text-forest-600">
+              <span className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
                 {item.type}
               </span>
               <h2 className="mt-2 font-display text-2xl">{item.name}</h2>
               <p className="mt-3 text-sm text-stone-600 dark:text-stone-400">
                 {item.description}
               </p>
-              <p className="mt-5 flex items-center gap-2 text-sm font-medium text-stone-500">
+              <p className="mt-5 flex items-center gap-2 text-sm font-medium text-stone-500 dark:text-stone-400">
                 <MapPin size={16} aria-hidden="true" /> {item.location}
               </p>
             </article>

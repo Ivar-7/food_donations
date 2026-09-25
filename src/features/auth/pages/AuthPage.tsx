@@ -168,7 +168,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-500 hover:text-forest-700 dark:text-stone-400"
+                    className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-500 hover:text-forest-700 dark:text-stone-400 dark:hover:text-forest-500"
                   >
                     {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
                   </button>
