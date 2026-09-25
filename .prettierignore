@@ -1,8 +1,0 @@
-node_modules/
-.codex/
-dist/
-coverage/
-.firebase-emulator-data/
-functions/lib/
-package-lock.json
-.env*

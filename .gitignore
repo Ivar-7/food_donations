@@ -14,16 +14,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
-.firebase-emulator-data/
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
-*-debug.log
-service-account*.json
-*-service-account*.json
-functions/.env*
-functions/lib/
-coverage/
 
 # Editor directories and files
 .vscode/*

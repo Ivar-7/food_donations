@@ -1,9 +1,71 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Phase 0 default: no client may access data until the tested Phase 2 rules
-    // replace this baseline. Server-side Admin SDK access remains unaffected.
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow create: if signedIn() && request.auth.uid == userId &&
+        request.resource.data.keys().hasOnly(['username', 'email', 'role', 'createdAt']) &&
+        request.resource.data.role == 'user' &&
+        request.resource.data.email == request.auth.token.email &&
+        request.resource.data.username is string &&
+        request.resource.data.username.size() >= 2 &&
+        request.resource.data.username.size() <= 60 &&
+        request.resource.data.createdAt is number;
+      allow update: if isAdmin() || (signedIn() && request.auth.uid == userId &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['username']) &&
+        request.resource.data.username is string &&
+        request.resource.data.username.size() >= 2 &&
+        request.resource.data.username.size() <= 60);
+      allow delete: if false;
+    }
+
+    match /donations/{donationId} {
+      allow read: if true;
+      allow create: if signedIn() &&
+        request.resource.data.keys().hasOnly(['title', 'category', 'quantity', 'location', 'description', 'status', 'donorId', 'donorName', 'createdAt']) &&
+        request.resource.data.donorId == request.auth.uid &&
+        request.resource.data.status == 'available' &&
+        request.resource.data.category in ['Food', 'Essentials'] &&
+        request.resource.data.title is string &&
+        request.resource.data.quantity is string &&
+        request.resource.data.location is string &&
+        request.resource.data.description is string &&
+        request.resource.data.createdAt is number;
+      allow update: if isAdmin() || (signedIn() &&
+        resource.data.donorId == request.auth.uid &&
+        resource.data.status == 'available' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'category', 'quantity', 'location', 'description']));
+      allow delete: if isAdmin() || (signedIn() &&
+        resource.data.donorId == request.auth.uid && resource.data.status == 'available');
+    }
+
+    match /organizationApplications/{applicationId} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if signedIn() &&
+        request.resource.data.keys().hasOnly(['userId', 'name', 'type', 'location', 'description', 'contactEmail', 'status', 'createdAt']) &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.type in ['Shelter', 'NGO'] &&
+        request.resource.data.name is string &&
+        request.resource.data.location is string &&
+        request.resource.data.description is string &&
+        request.resource.data.contactEmail is string &&
+        request.resource.data.createdAt is number;
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /organizations/{organizationId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
