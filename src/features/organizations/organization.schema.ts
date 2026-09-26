@@ -2,6 +2,7 @@ import type {
   Organization,
   OrganizationApplication,
 } from "./organization.types";
+import { isImageUrl } from "../../shared/utils/imageUrl";
 
 export function validateOrganizationApplication(data: {
   name: string;
@@ -35,6 +36,8 @@ export function parseOrganization(
     (data.type !== "Shelter" && data.type !== "NGO") ||
     typeof data.location !== "string" ||
     typeof data.description !== "string" ||
+    (data.imageUrl !== undefined &&
+      (typeof data.imageUrl !== "string" || !isImageUrl(data.imageUrl))) ||
     typeof data.ownerUserId !== "string" ||
     typeof data.createdAt !== "number" ||
     !Number.isFinite(data.createdAt)
@@ -46,6 +49,7 @@ export function parseOrganization(
     type: data.type,
     location: data.location,
     description: data.description,
+    ...(typeof data.imageUrl === "string" ? { imageUrl: data.imageUrl } : {}),
     ownerUserId: data.ownerUserId,
     createdAt: data.createdAt,
   };

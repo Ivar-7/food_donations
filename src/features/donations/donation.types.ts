@@ -5,6 +5,7 @@ export type Donation = {
   quantity: string;
   location: string;
   description: string;
+  imageUrl?: string;
   status: "available" | "requested" | "pickup" | "received";
   donorId: string;
   donorName: string;
@@ -14,5 +15,5 @@ export type Donation = {
 
 export type DonationFormValues = Pick<
   Donation,
-  "title" | "category" | "quantity" | "location" | "description"
+  "title" | "category" | "quantity" | "location" | "description" | "imageUrl"
 >;

@@ -7,7 +7,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import communityTable from "../../../assets/community-table.webp";
+import donationVolunteers from "../../../assets/food-donation-volunteers.jpg";
 import { useAvailableDonations } from "../../donations/state/useDonations";
 import DonationCard from "../../donations/components/DonationCard";
 import { useOrganizations } from "../../organizations/state/useOrganizations";
@@ -101,8 +101,8 @@ export default function HomePage() {
           </div>
           <div className="relative min-h-80 overflow-hidden sm:min-h-96 lg:col-span-7 lg:min-h-screen">
             <img
-              src={communityTable}
-              alt="Neighbors sharing a bag of fresh food at a community table"
+              src={donationVolunteers}
+              alt="Volunteers sorting donated food for community distribution"
               className="absolute inset-0 h-full w-full object-cover object-center"
               fetchPriority="high"
             />
@@ -227,8 +227,8 @@ export default function HomePage() {
               People putting care to work.
             </h2>
             <p className="mt-3 max-w-2xl text-stone-600 dark:text-stone-400">
-              Meet approved shelters and NGOs sharing resources across the
-              community.
+              Explore sample partner profiles and approved organizations sharing
+              resources across the community.
             </p>
           </div>
           <Link
@@ -263,22 +263,42 @@ export default function HomePage() {
             {organizations.data.slice(0, 3).map((item) => (
               <article
                 key={item.id}
-                className="border border-stone-200 bg-white p-7 dark:border-stone-800 dark:bg-stone-900"
+                className="overflow-hidden border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"
               >
-                <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
-                  <Building2 size={22} />
-                </span>
-                <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
-                  {item.type}
-                </p>
-                <h3 className="mt-2 font-display text-2xl">{item.name}</h3>
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
-                  {item.description}
-                </p>
-                <p className="mt-5 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
-                  <MapPin size={16} />
-                  {item.location}
-                </p>
+                {item.imageUrl && (
+                  <img
+                    src={item.imageUrl}
+                    alt={`${item.name} community work`}
+                    className="h-44 w-full object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                )}
+                <div className="p-7">
+                  {!item.imageUrl && (
+                    <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                      <Building2 size={22} />
+                    </span>
+                  )}
+                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                      {item.type}
+                    </span>
+                    {item.ownerUserId === "foodbridge-seed-organization" && (
+                      <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                        Sample
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="mt-2 font-display text-2xl">{item.name}</h3>
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                    {item.description}
+                  </p>
+                  <p className="mt-5 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+                    <MapPin size={16} />
+                    {item.location}
+                  </p>
+                </div>
               </article>
             ))}
           </div>

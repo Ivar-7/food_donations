@@ -107,11 +107,24 @@ export default function DonationDetailPage() {
           )}
           <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
             <article className="lg:col-span-8">
+              {donation.imageUrl && (
+                <img
+                  src={donation.imageUrl}
+                  alt={`${donation.title} donation`}
+                  className="mb-8 max-h-96 w-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              )}
               <div className="border-b border-stone-200 pb-8 dark:border-stone-800">
                 <div className="mb-6 flex flex-wrap items-center gap-3">
                   <span className="rounded-full bg-forest-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-forest-700 dark:bg-forest-900 dark:text-forest-100">
                     {donation.category}
                   </span>
+                  {donation.donorId === "foodbridge-seed-donor" && (
+                    <span className="rounded-full bg-amber-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                      Sample listing
+                    </span>
+                  )}
                   <span className="rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-stone-600 dark:border-stone-700 dark:text-stone-300">
                     {statusText[donation.status]}
                   </span>

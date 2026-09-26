@@ -17,7 +17,7 @@ export default function OrganizationsPage() {
       <PageHeader
         eyebrow="Our community partners"
         title="Organizations"
-        description="Discover approved shelters and NGOs working to put shared resources to good use."
+        description="Explore sample partner profiles and approved shelters and NGOs working to put shared resources to good use."
         action={
           <Link to="/organizations/apply" className={primaryClass}>
             Register your organization
@@ -38,21 +38,41 @@ export default function OrganizationsPage() {
           {data.map((item) => (
             <article
               key={item.id}
-              className="border border-stone-200 bg-white p-7 dark:border-stone-800 dark:bg-stone-900"
+              className="overflow-hidden border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"
             >
-              <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
-                <Building2 size={26} strokeWidth={1.6} aria-hidden="true" />
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={`${item.name} community work`}
+                  className="h-44 w-full object-cover"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
+              )}
+              <div className="p-7">
+                {!item.imageUrl && (
+                  <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                    <Building2 size={26} strokeWidth={1.6} aria-hidden="true" />
+                  </div>
+                )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                    {item.type}
+                  </span>
+                  {item.ownerUserId === "foodbridge-seed-organization" && (
+                    <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                      Sample
+                    </span>
+                  )}
+                </div>
+                <h2 className="mt-2 font-display text-2xl">{item.name}</h2>
+                <p className="mt-3 text-sm text-stone-600 dark:text-stone-400">
+                  {item.description}
+                </p>
+                <p className="mt-5 flex items-center gap-2 text-sm font-medium text-stone-500 dark:text-stone-400">
+                  <MapPin size={16} aria-hidden="true" /> {item.location}
+                </p>
               </div>
-              <span className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
-                {item.type}
-              </span>
-              <h2 className="mt-2 font-display text-2xl">{item.name}</h2>
-              <p className="mt-3 text-sm text-stone-600 dark:text-stone-400">
-                {item.description}
-              </p>
-              <p className="mt-5 flex items-center gap-2 text-sm font-medium text-stone-500 dark:text-stone-400">
-                <MapPin size={16} aria-hidden="true" /> {item.location}
-              </p>
             </article>
           ))}
         </div>

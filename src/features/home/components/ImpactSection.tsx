@@ -29,6 +29,9 @@ export default function ImpactSection() {
             A live look at what is available, what has reached a new home, and
             the partners helping it happen.
           </p>
+          <p className="mt-3 text-xs text-stone-500 dark:text-stone-400">
+            Sample listings and partner profiles are excluded from these totals.
+          </p>
         </div>
         <div className="lg:col-span-8">
           {!firebaseConfigured ? (

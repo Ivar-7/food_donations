@@ -22,6 +22,7 @@ export default function NewSponsorshipPage() {
     description: "",
     unit: "",
     targetQuantity: "",
+    imageUrl: "",
   });
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -135,6 +136,19 @@ export default function NewSponsorshipPage() {
               />
             </label>
           </div>
+          <label className="block text-sm font-semibold">
+            Image URL <span className="font-normal">(optional)</span>
+            <input
+              type="url"
+              maxLength={2048}
+              value={form.imageUrl}
+              onChange={(event) =>
+                setForm({ ...form, imageUrl: event.target.value })
+              }
+              className={`${fieldClass} mt-2`}
+              placeholder="https://example.org/images/needed-items.jpg"
+            />
+          </label>
           <p className="text-sm text-stone-500 dark:text-stone-400">
             Pledges are in-kind commitments. FoodBridge does not handle payments
             or delivery.

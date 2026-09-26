@@ -48,6 +48,13 @@ export default function RequestDonationButton({
   }
 
   if (donation.status !== "available") return null;
+  if (donation.donorId === "foodbridge-seed-donor")
+    return (
+      <p className="text-sm text-stone-600 dark:text-stone-400">
+        This is a sample listing for exploring FoodBridge. It cannot be
+        requested.
+      </p>
+    );
   if (profileLoading)
     return (
       <p role="status" className="text-sm text-stone-500 dark:text-stone-400">

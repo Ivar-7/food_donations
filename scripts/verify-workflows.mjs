@@ -87,12 +87,24 @@ const baseDonation = {
   quantity: "4 boxes",
   location: "Westlands",
   description: "Fresh produce ready for collection this afternoon.",
+  imageUrl:
+    "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
   donorId: donor.user.uid,
   donorName: "donor",
   status: "available",
   createdAt: Date.now(),
 };
 await setDoc(donationRef, baseDonation);
+const otherImageDonation = doc(donor.db, "donations", `other-image-${suffix}`);
+await setDoc(otherImageDonation, {
+  ...baseDonation,
+  imageUrl: "https://example.com/photo.jpg",
+});
+assert.equal(
+  (await getDoc(otherImageDonation)).data().imageUrl,
+  "https://example.com/photo.jpg",
+);
+await deleteDoc(otherImageDonation);
 await updateDoc(donationRef, { quantity: "5 boxes" });
 await denied("non-owner edit", () =>
   updateDoc(doc(partner.db, "donations", donationId), { title: "Hijacked" }),
@@ -286,12 +298,23 @@ await setDoc(sponsorshipRef, {
   ownerUserId: applicationId,
   title: "Pantry staples",
   description: "We need pantry staples for family food parcels.",
+  imageUrl:
+    "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=1200&q=80",
   unit: "bags",
   targetQuantity: 10,
   pledgedQuantity: 0,
   status: "open",
   createdAt: Date.now(),
 });
+const otherImageNeed = doc(partner.db, "sponsorships", `other-image-${suffix}`);
+await setDoc(otherImageNeed, {
+  ...(await getDoc(sponsorshipRef)).data(),
+  imageUrl: "https://example.com/photo.jpg",
+});
+assert.equal(
+  (await getDoc(otherImageNeed)).data().imageUrl,
+  "https://example.com/photo.jpg",
+);
 await denied("unapproved need", () =>
   setDoc(doc(donor.db, "sponsorships", `bad-${suffix}`), {
     organizationId: applicationId,

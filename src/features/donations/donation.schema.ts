@@ -1,4 +1,5 @@
 import type { Donation, DonationFormValues } from "./donation.types";
+import { isImageUrl } from "../../shared/utils/imageUrl";
 
 const categories = ["Food", "Essentials"] as const;
 const statuses = ["available", "requested", "pickup", "received"] as const;
@@ -16,6 +17,8 @@ export function validateDonation(data: DonationFormValues): string | null {
     data.description.trim().length > 1000
   )
     return "Add a description between 10 and 1000 characters.";
+  if (data.imageUrl?.trim() && !isImageUrl(data.imageUrl))
+    return "Use a valid http or https image URL.";
   return null;
 }
 
@@ -26,6 +29,7 @@ export function cleanDonation(data: DonationFormValues): DonationFormValues {
     quantity: data.quantity.trim(),
     location: data.location.trim(),
     description: data.description.trim(),
+    ...(data.imageUrl?.trim() ? { imageUrl: data.imageUrl.trim() } : {}),
   };
 }
 
@@ -46,7 +50,8 @@ export function parseDonation(
     !data.donorName.trim() ||
     typeof data.createdAt !== "number" ||
     !Number.isFinite(data.createdAt) ||
-    (data.orderId !== undefined && typeof data.orderId !== "string")
+    (data.orderId !== undefined && typeof data.orderId !== "string") ||
+    (data.imageUrl !== undefined && typeof data.imageUrl !== "string")
   ) {
     throw new Error("Invalid donation data");
   }
@@ -57,6 +62,7 @@ export function parseDonation(
       quantity: data.quantity,
       location: data.location,
       description: data.description,
+      ...(typeof data.imageUrl === "string" ? { imageUrl: data.imageUrl } : {}),
     })
   ) {
     throw new Error("Invalid donation data");
@@ -68,6 +74,7 @@ export function parseDonation(
     quantity: data.quantity,
     location: data.location,
     description: data.description,
+    ...(typeof data.imageUrl === "string" ? { imageUrl: data.imageUrl } : {}),
     status: data.status as Donation["status"],
     donorId: data.donorId,
     donorName: data.donorName,

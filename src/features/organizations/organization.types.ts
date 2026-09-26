@@ -4,6 +4,7 @@ export type Organization = {
   type: "Shelter" | "NGO";
   location: string;
   description: string;
+  imageUrl?: string;
   ownerUserId: string;
   createdAt: number;
 };

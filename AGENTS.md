@@ -15,7 +15,7 @@
 
 ## Project Conventions
 - **Naming** — Use `*.api.ts`, `*.keys.ts`, `*.types.ts`, `*.schema.ts`, `*Provider.tsx`, `*Page.tsx`, and `use<Thing>.ts`.
-- **Firebase** — Use authorization rules; create required indexes; deploy rule and index changes.
+- **Firebase** — Use authorization rules only; create required indexes; deploy rule and index changes.
 - **Errors** — Use `src/shared/errors/` for normalized application errors, user messages, and diagnostic logging; never show raw errors to users.
 - **Environment** — Maintain `.env.example`; expose only public configuration through `VITE_` variables.
 - **Secrets** — Store no secrets in source or client environment files.

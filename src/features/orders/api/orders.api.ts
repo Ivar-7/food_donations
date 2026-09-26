@@ -91,7 +91,8 @@ export async function requestDonation(
       throw new Error("This donation has already been requested.");
     if (
       organization.ownerUserId !== requesterId ||
-      donation.donorId === requesterId
+      donation.donorId === requesterId ||
+      donation.donorId === "foodbridge-seed-donor"
     )
       throw new Error("You cannot request this donation.");
     transaction.update(donationRef, {

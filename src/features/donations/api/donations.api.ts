@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -87,7 +88,12 @@ export async function updateDonation(
   const current = parseDonation(existing.id, existing.data());
   if (current.donorId !== ownerId || current.status !== "available")
     throw new Error("This donation cannot be edited.");
-  await updateDoc(reference, cleaned);
+  await updateDoc(reference, {
+    ...cleaned,
+    ...(!cleaned.imageUrl && current.imageUrl
+      ? { imageUrl: deleteField() }
+      : {}),
+  });
 }
 
 export async function deleteDonation(

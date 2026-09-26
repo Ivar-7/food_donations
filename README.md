@@ -16,6 +16,8 @@ FoodBridge is a React app for sharing surplus food and essential supplies with l
 4. If you change Firestore rules or indexes, deploy with `npx firebase deploy --only firestore --project react-abcederian` (requires project access).
 5. Run `npm run dev`.
 
+To populate donations, organizations, and community needs with labeled examples and matching hotlinked Unsplash photos, sign in with `npx firebase login` and run `npm run seed`. The command uses the project in `.firebaserc`, skips existing sample IDs, and supports `--dry-run` or `--emulator` after `--`. The six sample donations cannot be requested, and the four sample needs cannot receive pledges. Three sample partner profiles demonstrate the directory without claiming real approval.
+
 For local emulators, set `VITE_USE_FIREBASE_EMULATORS=true` in `.env`, run `npm run dev:emulators` in one terminal, and `npm run dev` in another. The emulator UI uses port 4000. Run `node scripts/verify-workflows.mjs` while the emulators are running to check the donation, approval, order, pledge, notification, and authorization workflows.
 
 ## Project structure

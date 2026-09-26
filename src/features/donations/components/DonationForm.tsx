@@ -59,7 +59,7 @@ export default function DonationForm({
           </h2>
         </div>
         <span className="hidden rounded-full bg-forest-50 px-4 py-2 text-xs font-bold text-forest-700 dark:bg-forest-900 dark:text-forest-100 sm:block">
-          All fields required
+          Photo optional
         </span>
       </div>
       <div className="space-y-6">
@@ -133,6 +133,20 @@ export default function DonationForm({
           />
           <span className="mt-2 block text-right text-xs font-normal text-stone-500 dark:text-stone-400">
             {form.description.length}/1000
+          </span>
+        </label>
+        <label className="block text-sm font-semibold">
+          Image URL <span className="font-normal">(optional)</span>
+          <input
+            type="url"
+            maxLength={2048}
+            className={`${fieldClass} mt-2`}
+            placeholder="https://example.org/images/donation.jpg"
+            value={form.imageUrl ?? ""}
+            onChange={(event) => change("imageUrl", event.target.value)}
+          />
+          <span className="mt-2 block text-xs font-normal text-stone-500 dark:text-stone-400">
+            Paste a direct image link that matches your items.
           </span>
         </label>
         {error && <Notice error>{error}</Notice>}

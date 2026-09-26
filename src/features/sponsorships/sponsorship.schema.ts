@@ -1,10 +1,12 @@
 import type { Pledge, Sponsorship } from "./sponsorship.types";
+import { isImageUrl } from "../../shared/utils/imageUrl";
 
 export function validateSponsorship(data: {
   title: string;
   description: string;
   unit: string;
   targetQuantity: number;
+  imageUrl?: string;
 }): string | null {
   if (data.title.trim().length < 3 || data.title.trim().length > 100)
     return "Enter a title between 3 and 100 characters.";
@@ -15,6 +17,8 @@ export function validateSponsorship(data: {
     return "Describe the need in 20 to 1,000 characters.";
   if (data.unit.trim().length < 2 || data.unit.trim().length > 40)
     return "Enter a clear unit, such as bags or boxes.";
+  if (data.imageUrl?.trim() && !isImageUrl(data.imageUrl))
+    return "Use a valid http or https image URL.";
   if (
     !Number.isInteger(data.targetQuantity) ||
     data.targetQuantity < 1 ||
@@ -34,6 +38,8 @@ export function parseSponsorship(
     typeof data.ownerUserId !== "string" ||
     typeof data.title !== "string" ||
     typeof data.description !== "string" ||
+    (data.imageUrl !== undefined &&
+      (typeof data.imageUrl !== "string" || !isImageUrl(data.imageUrl))) ||
     typeof data.unit !== "string" ||
     typeof data.targetQuantity !== "number" ||
     typeof data.pledgedQuantity !== "number" ||
@@ -54,6 +60,7 @@ export function parseSponsorship(
     ownerUserId: data.ownerUserId,
     title: data.title,
     description: data.description,
+    ...(typeof data.imageUrl === "string" ? { imageUrl: data.imageUrl } : {}),
     unit: data.unit,
     targetQuantity: data.targetQuantity,
     pledgedQuantity: data.pledgedQuantity,

@@ -70,6 +70,7 @@ export async function createSponsorship(input: {
   description: string;
   unit: string;
   targetQuantity: number;
+  imageUrl?: string;
 }) {
   const validation = validateSponsorship(input);
   if (validation) throw new Error("Invalid sponsorship form data");
@@ -90,6 +91,7 @@ export async function createSponsorship(input: {
     ownerUserId: input.ownerUserId,
     title: input.title.trim(),
     description: input.description.trim(),
+    ...(input.imageUrl?.trim() ? { imageUrl: input.imageUrl.trim() } : {}),
     unit: input.unit.trim(),
     targetQuantity: input.targetQuantity,
     pledgedQuantity: 0,
@@ -128,6 +130,7 @@ export async function pledgeToSponsorship(
     );
     if (
       sponsorship.status !== "open" ||
+      sponsorship.ownerUserId === "foodbridge-seed-organization" ||
       sponsorship.pledgedQuantity + quantity > sponsorship.targetQuantity
     )
       throw new Error("The requested quantity is no longer available.");

@@ -23,7 +23,7 @@ export default function SponsorshipsPage() {
       <PageHeader
         eyebrow="In-kind support"
         title="Community needs"
-        description="Approved organizations share specific needs. Pledge items you can provide and help them reach their target."
+        description="Explore sample needs and requests from approved organizations. Pledge items to real organizations you can support."
         action={
           profile?.organizationId ? (
             <Link to="/sponsorships/new" className={primaryClass}>
@@ -58,32 +58,48 @@ export default function SponsorshipsPage() {
             <Link
               key={item.id}
               to={`/sponsorships/${item.id}`}
-              className="flex h-full flex-col border border-stone-200 bg-white p-6 transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900"
+              className="flex h-full flex-col overflow-hidden border border-stone-200 bg-white transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900"
             >
-              <div className="flex items-start justify-between gap-3">
-                <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
-                  <HeartHandshake size={22} strokeWidth={1.7} />
-                </span>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "open" ? "bg-forest-100 text-forest-800 dark:bg-forest-900 dark:text-forest-100" : "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300"}`}
-                >
-                  {item.status === "open" ? "Open" : "Fulfilled"}
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={`${item.title} supplies`}
+                  className="h-44 w-full object-cover"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                />
+              )}
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                    <HeartHandshake size={22} strokeWidth={1.7} />
+                  </span>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "open" ? "bg-forest-100 text-forest-800 dark:bg-forest-900 dark:text-forest-100" : "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300"}`}
+                  >
+                    {item.status === "open" ? "Open" : "Fulfilled"}
+                  </span>
+                </div>
+                <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                  {item.organizationName}
+                </p>
+                {item.ownerUserId === "foodbridge-seed-organization" && (
+                  <span className="mt-2 self-start rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                    Sample need
+                  </span>
+                )}
+                <h2 className="mt-2 font-display text-2xl">{item.title}</h2>
+                <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                  {item.description}
+                </p>
+                <div className="mt-6 border-t border-stone-200 pt-4 text-sm font-semibold dark:border-stone-800">
+                  {item.pledgedQuantity} of {item.targetQuantity} {item.unit}{" "}
+                  pledged
+                </div>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-forest-700 dark:text-forest-500">
+                  View need <ArrowUpRight size={15} />
                 </span>
               </div>
-              <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
-                {item.organizationName}
-              </p>
-              <h2 className="mt-2 font-display text-2xl">{item.title}</h2>
-              <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
-                {item.description}
-              </p>
-              <div className="mt-6 border-t border-stone-200 pt-4 text-sm font-semibold dark:border-stone-800">
-                {item.pledgedQuantity} of {item.targetQuantity} {item.unit}{" "}
-                pledged
-              </div>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-forest-700 dark:text-forest-500">
-                View need <ArrowUpRight size={15} />
-              </span>
             </Link>
           ))}
         </div>

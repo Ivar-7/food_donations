@@ -85,6 +85,14 @@ export default function SponsorshipPage() {
       ) : (
         <div className="grid gap-8 lg:grid-cols-12">
           <section className="border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-7">
+            {item.imageUrl && (
+              <img
+                src={item.imageUrl}
+                alt={`${item.title} supplies`}
+                className="mb-6 max-h-96 w-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+            )}
             <div className="flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
               <HeartHandshake size={27} strokeWidth={1.6} />
             </div>
@@ -115,7 +123,12 @@ export default function SponsorshipPage() {
                 Commit only to items you can provide. FoodBridge records the
                 pledge but does not process payments or arrange delivery.
               </p>
-              {!user ? (
+              {item.ownerUserId === "foodbridge-seed-organization" ? (
+                <Notice>
+                  This is a sample need for exploring FoodBridge. It cannot
+                  receive pledges.
+                </Notice>
+              ) : !user ? (
                 <Link
                   to="/login"
                   state={{ from: `/sponsorships/${item.id}` }}

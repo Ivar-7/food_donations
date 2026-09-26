@@ -9,24 +9,41 @@ export default function DonationCard({ donation }: { donation: Donation }) {
         to={`/donations/${donation.id}`}
         className="group flex h-full flex-col"
       >
-        <div
-          className={`flex h-36 items-center justify-between px-6 ${donation.category === "Food" ? "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100" : "bg-forest-50 text-forest-800 dark:bg-forest-900 dark:text-forest-100"}`}
-          aria-hidden="true"
-        >
-          <span className="font-display text-3xl">
-            {donation.category === "Food" ? "Good food" : "Essentials"}
-          </span>
-          {donation.category === "Food" ? (
-            <Carrot size={48} strokeWidth={1.3} />
-          ) : (
-            <Package size={48} strokeWidth={1.3} />
-          )}
-        </div>
+        {donation.imageUrl ? (
+          <img
+            src={donation.imageUrl}
+            alt={`${donation.title} donation`}
+            className="h-44 w-full object-cover"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div
+            className={`flex h-44 items-center justify-between px-6 ${donation.category === "Food" ? "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100" : "bg-forest-50 text-forest-800 dark:bg-forest-900 dark:text-forest-100"}`}
+            aria-hidden="true"
+          >
+            <span className="font-display text-3xl">
+              {donation.category === "Food" ? "Good food" : "Essentials"}
+            </span>
+            {donation.category === "Food" ? (
+              <Carrot size={48} strokeWidth={1.3} />
+            ) : (
+              <Package size={48} strokeWidth={1.3} />
+            )}
+          </div>
+        )}
         <div className="flex flex-1 flex-col p-6">
           <div className="flex items-center justify-between gap-3">
-            <span className="rounded-full bg-forest-100 px-3 py-1 text-xs font-bold text-forest-700 dark:bg-forest-900 dark:text-forest-100">
-              {donation.category}
-            </span>
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-forest-100 px-3 py-1 text-xs font-bold text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                {donation.category}
+              </span>
+              {donation.donorId === "foodbridge-seed-donor" && (
+                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                  Sample
+                </span>
+              )}
+            </div>
             <span className="text-xs text-stone-500 dark:text-stone-400">
               {new Date(donation.createdAt).toLocaleDateString()}
             </span>

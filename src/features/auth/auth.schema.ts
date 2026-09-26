@@ -1,23 +1,38 @@
+import { Timestamp } from "firebase/firestore";
 import type { UserProfile } from "./auth.types";
 
 export function parseUserProfile(data: Record<string, unknown>): UserProfile {
+  const username =
+    typeof data.username === "string" ? data.username : data.full_name;
+  const createdAt =
+    typeof data.createdAt === "number"
+      ? data.createdAt
+      : data.created_at instanceof Timestamp
+        ? data.created_at.toMillis()
+        : undefined;
+  const legacyProfile = data.created_at instanceof Timestamp;
+  const role = legacyProfile
+    ? data.role === "admin"
+      ? "admin"
+      : "user"
+    : data.role;
   if (
-    typeof data.username !== "string" ||
-    validateUsername(data.username) !== null ||
+    typeof username !== "string" ||
+    validateUsername(username) !== null ||
     typeof data.email !== "string" ||
-    (data.role !== "user" && data.role !== "admin") ||
-    typeof data.createdAt !== "number" ||
-    !Number.isFinite(data.createdAt) ||
+    (role !== "user" && role !== "admin") ||
+    typeof createdAt !== "number" ||
+    !Number.isFinite(createdAt) ||
     (data.organizationId !== undefined &&
       typeof data.organizationId !== "string")
   ) {
     throw new Error("Invalid user profile data");
   }
   return {
-    username: data.username,
+    username,
     email: data.email,
-    role: data.role,
-    createdAt: data.createdAt,
+    role,
+    createdAt,
     ...(data.organizationId ? { organizationId: data.organizationId } : {}),
   };
 }

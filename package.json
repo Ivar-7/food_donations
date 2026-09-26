@@ -11,7 +11,8 @@
     "format": "prettier --write src scripts vite.config.ts package.json tsconfig.app.json index.html README.md firebase.json firestore.indexes.json",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev:emulators": "firebase emulators:start --only auth,firestore"
+    "dev:emulators": "firebase emulators:start --only auth,firestore",
+    "seed": "node scripts/seed-data.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.103.2",

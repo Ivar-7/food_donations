@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import communityTable from "../../../assets/community-table.webp";
+import donationVolunteers from "../../../assets/food-donation-volunteers.jpg";
 import { useAuth } from "../../../app/authContext";
 import { firebaseConfigured } from "../../../shared/firebase/client";
 import { signIn, signUp, requestPasswordReset } from "../api/auth.api";
@@ -66,8 +66,8 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
     <div className="grid min-h-screen bg-stone-100 lg:min-h-0 lg:grid-cols-12 dark:bg-forest-950">
       <div className="relative hidden min-h-screen overflow-hidden lg:col-span-6 lg:block xl:col-span-7">
         <img
-          src={communityTable}
-          alt="Fresh food being shared at a community table"
+          src={donationVolunteers}
+          alt="Volunteers sorting donated food for community distribution"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-950/10 to-transparent" />

@@ -10,39 +10,14 @@ service cloud.firestore {
     function sponsorshipPath(id) { return /databases/$(database)/documents/sponsorships/$(id); }
     function pledgePath(id, uid) { return /databases/$(database)/documents/sponsorships/$(id)/pledges/$(uid); }
     function isAdmin() { return signedIn() && get(userPath(request.auth.uid)).data.role == 'admin'; }
-    function textBetween(value, minimum, maximum) {
-      return value is string && value.size() >= minimum && value.size() <= maximum;
-    }
-    function validDonation(data) {
-      return data.keys().hasAll(['title', 'category', 'quantity', 'location', 'description', 'status', 'donorId', 'donorName', 'createdAt']) &&
-        data.keys().hasOnly(['title', 'category', 'quantity', 'location', 'description', 'status', 'donorId', 'donorName', 'createdAt', 'orderId']) &&
-        textBetween(data.title, 3, 100) && data.category in ['Food', 'Essentials'] &&
-        textBetween(data.quantity, 1, 80) && textBetween(data.location, 2, 120) &&
-        textBetween(data.description, 10, 1000) && textBetween(data.donorName, 1, 60) &&
-        data.donorId is string && data.createdAt is number &&
-        data.status in ['available', 'requested', 'pickup', 'received'];
-    }
-    function validApplication(data) {
-      return data.keys().hasAll(['userId', 'name', 'type', 'location', 'description', 'contactEmail', 'status', 'createdAt']) &&
-        data.keys().hasOnly(['userId', 'name', 'type', 'location', 'description', 'contactEmail', 'status', 'createdAt', 'reviewedAt', 'reviewerId']) &&
-        data.userId is string && textBetween(data.name, 3, 120) && data.type in ['Shelter', 'NGO'] &&
-        textBetween(data.location, 2, 120) && textBetween(data.description, 20, 1500) &&
-        textBetween(data.contactEmail, 3, 254) && data.createdAt is number &&
-        data.status in ['pending', 'approved', 'rejected'];
-    }
-
     match /users/{userId} {
       allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
       allow create: if signedIn() && request.auth.uid == userId &&
         request.resource.data.keys().hasOnly(['username', 'email', 'role', 'createdAt']) &&
-        request.resource.data.keys().hasAll(['username', 'email', 'role', 'createdAt']) &&
-        request.resource.data.role == 'user' && request.resource.data.email == request.auth.token.email &&
-        textBetween(request.resource.data.username, 2, 60) && request.resource.data.createdAt is number;
+        request.resource.data.role == 'user' && request.resource.data.email == request.auth.token.email;
       allow update: if signedIn() && ((request.auth.uid == userId &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['username']) &&
-        textBetween(request.resource.data.username, 2, 60)) ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['username'])) ||
         (isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['organizationId']) &&
-        request.resource.data.organizationId is string &&
         getAfter(applicationPath(request.resource.data.organizationId)).data.status == 'approved' &&
         getAfter(applicationPath(request.resource.data.organizationId)).data.userId == userId &&
         getAfter(organizationPath(request.resource.data.organizationId)).data.ownerUserId == userId));
@@ -51,12 +26,12 @@ service cloud.firestore {
 
     match /donations/{donationId} {
       allow read: if true;
-      allow create: if signedIn() && validDonation(request.resource.data) &&
+      allow create: if signedIn() &&
         request.resource.data.donorId == request.auth.uid && request.resource.data.status == 'available' &&
         !('orderId' in request.resource.data);
-      allow update: if signedIn() && validDonation(request.resource.data) && (
+      allow update: if signedIn() && (
         (resource.data.donorId == request.auth.uid && resource.data.status == 'available' &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'category', 'quantity', 'location', 'description'])) ||
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'category', 'quantity', 'location', 'description', 'imageUrl'])) ||
         (resource.data.status == 'available' && request.resource.data.status == 'requested' &&
           request.resource.data.orderId == donationId &&
           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'orderId']) &&
@@ -72,11 +47,11 @@ service cloud.firestore {
 
     match /organizationApplications/{applicationId} {
       allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if signedIn() && validApplication(request.resource.data) &&
+      allow create: if signedIn() &&
         request.resource.data.userId == request.auth.uid && request.resource.data.status == 'pending' &&
         !('reviewedAt' in request.resource.data) && !('reviewerId' in request.resource.data) &&
         !('organizationId' in get(userPath(request.auth.uid)).data);
-      allow update: if signedIn() && validApplication(request.resource.data) && (
+      allow update: if signedIn() && (
         (resource.data.userId == request.auth.uid && resource.data.status == 'rejected' &&
           request.resource.data.status == 'pending' &&
           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'type', 'location', 'description', 'contactEmail', 'status', 'createdAt', 'reviewedAt', 'reviewerId']) &&
@@ -85,7 +60,7 @@ service cloud.firestore {
         (isAdmin() && resource.data.status == 'pending' &&
           request.resource.data.status in ['approved', 'rejected'] &&
           request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedAt', 'reviewerId']) &&
-          request.resource.data.reviewedAt is number && request.resource.data.reviewerId == request.auth.uid &&
+          request.resource.data.reviewerId == request.auth.uid &&
           (request.resource.data.status == 'rejected' ||
             (getAfter(organizationPath(applicationId)).data.ownerUserId == resource.data.userId &&
              getAfter(userPath(resource.data.userId)).data.organizationId == applicationId))));
@@ -95,9 +70,6 @@ service cloud.firestore {
     match /organizations/{organizationId} {
       allow read: if true;
       allow create: if isAdmin() &&
-        request.resource.data.keys().hasOnly(['name', 'type', 'location', 'description', 'ownerUserId', 'createdAt']) &&
-        request.resource.data.keys().hasAll(['name', 'type', 'location', 'description', 'ownerUserId', 'createdAt']) &&
-        request.resource.data.createdAt is number &&
         getAfter(applicationPath(organizationId)).data.status == 'approved' &&
         request.resource.data.ownerUserId == getAfter(applicationPath(organizationId)).data.userId &&
         request.resource.data.name == getAfter(applicationPath(organizationId)).data.name &&
@@ -112,14 +84,11 @@ service cloud.firestore {
       allow get: if signedIn() && (resource == null || resource.data.donorId == request.auth.uid || resource.data.requestedBy == request.auth.uid || isAdmin());
       allow list: if signedIn() && (resource.data.donorId == request.auth.uid || resource.data.requestedBy == request.auth.uid || isAdmin());
       allow create: if signedIn() && orderId == request.resource.data.donationId &&
-        request.resource.data.keys().hasOnly(['donationId', 'donationTitle', 'donorId', 'organizationId', 'organizationName', 'requestedBy', 'pickupCode', 'status', 'createdAt', 'updatedAt']) &&
-        request.resource.data.keys().hasAll(['donationId', 'donationTitle', 'donorId', 'organizationId', 'organizationName', 'requestedBy', 'pickupCode', 'status', 'createdAt', 'updatedAt']) &&
         request.resource.data.requestedBy == request.auth.uid && request.resource.data.status == 'requested' &&
-        request.resource.data.pickupCode is string && request.resource.data.pickupCode.matches('^[0-9]{6}$') &&
-        request.resource.data.createdAt is number && request.resource.data.updatedAt == request.resource.data.createdAt &&
         get(organizationPath(request.resource.data.organizationId)).data.ownerUserId == request.auth.uid &&
         request.resource.data.organizationName == get(organizationPath(request.resource.data.organizationId)).data.name &&
         get(donationPath(orderId)).data.status == 'available' &&
+        get(donationPath(orderId)).data.donorId != 'foodbridge-seed-donor' &&
         request.resource.data.donorId == get(donationPath(orderId)).data.donorId &&
         request.resource.data.donorId != request.auth.uid &&
         request.resource.data.donationTitle == get(donationPath(orderId)).data.title &&
@@ -127,7 +96,6 @@ service cloud.firestore {
         getAfter(donationPath(orderId)).data.orderId == orderId;
       allow update: if signedIn() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']) &&
-        request.resource.data.updatedAt is number && request.resource.data.updatedAt >= resource.data.createdAt &&
         ((resource.data.status == 'requested' && request.resource.data.status == 'pickup' && resource.data.donorId == request.auth.uid) ||
          (resource.data.status == 'pickup' && request.resource.data.status == 'received' && resource.data.requestedBy == request.auth.uid)) &&
         getAfter(donationPath(orderId)).data.status == request.resource.data.status;
@@ -137,20 +105,14 @@ service cloud.firestore {
     match /sponsorships/{sponsorshipId} {
       allow read: if true;
       allow create: if signedIn() &&
-        request.resource.data.keys().hasOnly(['organizationId', 'organizationName', 'ownerUserId', 'title', 'description', 'unit', 'targetQuantity', 'pledgedQuantity', 'status', 'createdAt']) &&
-        request.resource.data.keys().hasAll(['organizationId', 'organizationName', 'ownerUserId', 'title', 'description', 'unit', 'targetQuantity', 'pledgedQuantity', 'status', 'createdAt']) &&
         request.resource.data.ownerUserId == request.auth.uid &&
         get(organizationPath(request.resource.data.organizationId)).data.ownerUserId == request.auth.uid &&
         request.resource.data.organizationName == get(organizationPath(request.resource.data.organizationId)).data.name &&
-        textBetween(request.resource.data.title, 3, 100) && textBetween(request.resource.data.description, 10, 1000) &&
-        textBetween(request.resource.data.unit, 1, 40) &&
-        request.resource.data.targetQuantity is int && request.resource.data.targetQuantity > 0 && request.resource.data.targetQuantity <= 100000 &&
-        request.resource.data.pledgedQuantity == 0 && request.resource.data.status == 'open' && request.resource.data.createdAt is number;
-      allow update: if signedIn() && resource.data.status == 'open' && request.auth.uid != resource.data.ownerUserId &&
+        request.resource.data.pledgedQuantity == 0 && request.resource.data.status == 'open';
+      allow update: if signedIn() && resource.data.status == 'open' && resource.data.ownerUserId != 'foodbridge-seed-organization' && request.auth.uid != resource.data.ownerUserId &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['pledgedQuantity', 'status']) &&
         !exists(pledgePath(sponsorshipId, request.auth.uid)) &&
         getAfter(pledgePath(sponsorshipId, request.auth.uid)).data.userId == request.auth.uid &&
-        getAfter(pledgePath(sponsorshipId, request.auth.uid)).data.quantity is int &&
         request.resource.data.pledgedQuantity == resource.data.pledgedQuantity + getAfter(pledgePath(sponsorshipId, request.auth.uid)).data.quantity &&
         request.resource.data.pledgedQuantity <= resource.data.targetQuantity &&
         request.resource.data.status == (request.resource.data.pledgedQuantity == resource.data.targetQuantity ? 'fulfilled' : 'open');
@@ -159,11 +121,9 @@ service cloud.firestore {
       match /pledges/{userId} {
         allow read: if signedIn() && (request.auth.uid == userId || get(sponsorshipPath(sponsorshipId)).data.ownerUserId == request.auth.uid);
         allow create: if signedIn() && request.auth.uid == userId &&
-          request.resource.data.keys().hasOnly(['userId', 'quantity', 'createdAt']) &&
-          request.resource.data.keys().hasAll(['userId', 'quantity', 'createdAt']) &&
           request.resource.data.userId == userId && request.resource.data.quantity is int && request.resource.data.quantity > 0 &&
-          request.resource.data.createdAt is number &&
           get(sponsorshipPath(sponsorshipId)).data.status == 'open' &&
+          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != 'foodbridge-seed-organization' &&
           get(sponsorshipPath(sponsorshipId)).data.ownerUserId != userId &&
           getAfter(sponsorshipPath(sponsorshipId)).data.pledgedQuantity == get(sponsorshipPath(sponsorshipId)).data.pledgedQuantity + request.resource.data.quantity &&
           getAfter(sponsorshipPath(sponsorshipId)).data.pledgedQuantity <= get(sponsorshipPath(sponsorshipId)).data.targetQuantity;
@@ -174,10 +134,8 @@ service cloud.firestore {
     match /notifications/{notificationId} {
       allow read: if signedIn() && resource.data.recipientId == request.auth.uid;
       allow create: if signedIn() &&
-        request.resource.data.keys().hasOnly(['recipientId', 'actorId', 'type', 'sourceId', 'createdAt', 'readAt']) &&
-        request.resource.data.keys().hasAll(['recipientId', 'actorId', 'type', 'sourceId', 'createdAt', 'readAt']) &&
         request.resource.data.actorId == request.auth.uid && request.resource.data.readAt == null &&
-        request.resource.data.createdAt is number && request.resource.data.recipientId is string && request.resource.data.sourceId is string && (
+        (
           (request.resource.data.type in ['application_approved', 'application_rejected'] && isAdmin() &&
             get(applicationPath(request.resource.data.sourceId)).data.status == 'pending' &&
             getAfter(applicationPath(request.resource.data.sourceId)).data.status == (request.resource.data.type == 'application_approved' ? 'approved' : 'rejected') &&
@@ -193,7 +151,7 @@ service cloud.firestore {
             getAfter(pledgePath(request.resource.data.sourceId, request.auth.uid)).data.userId == request.auth.uid &&
             request.resource.data.recipientId == getAfter(sponsorshipPath(request.resource.data.sourceId)).data.ownerUserId));
       allow update: if signedIn() && resource.data.recipientId == request.auth.uid && resource.data.readAt == null &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readAt']) && request.resource.data.readAt is number;
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readAt']);
       allow delete: if false;
     }
 

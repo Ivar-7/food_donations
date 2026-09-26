@@ -5,6 +5,7 @@ export type Sponsorship = {
   ownerUserId: string;
   title: string;
   description: string;
+  imageUrl?: string;
   unit: string;
   targetQuantity: number;
   pledgedQuantity: number;
