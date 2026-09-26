@@ -51,7 +51,7 @@ export default function RequestDonationButton({
   if (donation.donorId === "foodbridge-seed-donor")
     return (
       <p className="text-sm text-stone-600 dark:text-stone-400">
-        This is a sample listing for exploring FoodBridge. It cannot be
+        This is a sample listing for exploring Okoa Food. It cannot be
         requested.
       </p>
     );

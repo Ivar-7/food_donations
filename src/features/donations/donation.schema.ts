@@ -77,7 +77,10 @@ export function parseDonation(
     ...(typeof data.imageUrl === "string" ? { imageUrl: data.imageUrl } : {}),
     status: data.status as Donation["status"],
     donorId: data.donorId,
-    donorName: data.donorName,
+    donorName:
+      data.donorId === "foodbridge-seed-donor"
+        ? "Okoa Food sample"
+        : data.donorName,
     createdAt: data.createdAt,
     ...(typeof data.orderId === "string" ? { orderId: data.orderId } : {}),
   };

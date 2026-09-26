@@ -64,7 +64,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-7 max-w-xl text-base leading-relaxed text-stone-600 dark:text-stone-300 sm:text-lg">
               Bring your surplus food and essentials to a community that can use
-              them. FoodBridge makes it simple to share what you have and
+              them. Okoa Food makes it simple to share what you have and
               discover what is nearby.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -136,7 +136,7 @@ export default function HomePage() {
             to="/about"
             className="mt-7 inline-flex items-center gap-2 border-b border-forest-700 pb-1 text-sm font-bold text-forest-700 dark:border-forest-500 dark:text-forest-500"
           >
-            How FoodBridge works <ArrowUpRight size={16} />
+            How Okoa Food works <ArrowUpRight size={16} />
           </Link>
         </div>
         <div className="lg:col-span-7">

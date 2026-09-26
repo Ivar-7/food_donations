@@ -45,7 +45,7 @@ export default function SponsorshipPage() {
       await pledgeToSponsorship(item.id, user.uid, amount);
       await client.invalidateQueries({ queryKey: sponsorshipsKeys.all });
       setSuccess(
-        "Your pledge has been recorded. Please coordinate the handoff with the organization outside FoodBridge.",
+        "Your pledge has been recorded. Please coordinate the handoff with the organization outside Okoa Food.",
       );
     } catch (cause) {
       setActionError(toAppError(cause).message);
@@ -120,12 +120,12 @@ export default function SponsorshipPage() {
             <div className="border border-stone-200 bg-forest-50 p-6 dark:border-forest-800 dark:bg-forest-900 sm:p-8">
               <h2 className="font-display text-3xl">Make a pledge</h2>
               <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
-                Commit only to items you can provide. FoodBridge records the
+                Commit only to items you can provide. Okoa Food records the
                 pledge but does not process payments or arrange delivery.
               </p>
               {item.ownerUserId === "foodbridge-seed-organization" ? (
                 <Notice>
-                  This is a sample need for exploring FoodBridge. It cannot
+                  This is a sample need for exploring Okoa Food. It cannot
                   receive pledges.
                 </Notice>
               ) : !user ? (

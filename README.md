@@ -1,6 +1,6 @@
-# FoodBridge
+# Okoa Food
 
-FoodBridge is a React app for sharing surplus food and essential supplies with local communities. Donors can post and manage listings, approved organizations can request them and track pickup, and neighbors can pledge toward organization needs.
+Okoa Food is a React app for sharing surplus food and essential supplies with local communities. Donors can post and manage listings, approved organizations can request them and track pickup, and neighbors can pledge toward organization needs.
 
 ## Stack
 

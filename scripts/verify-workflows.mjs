@@ -78,6 +78,17 @@ assert.equal(
   (await getDoc(doc(admin.db, "users", admin.user.uid))).data().role,
   "admin",
 );
+await denied("self role elevation", () =>
+  updateDoc(doc(donor.db, "users", donor.user.uid), { role: "admin" }),
+);
+await denied("self organization claim", () =>
+  updateDoc(doc(donor.db, "users", donor.user.uid), {
+    organizationId: "someone-else",
+  }),
+);
+await updateDoc(doc(donor.db, "users", donor.user.uid), {
+  username: "Donor One",
+});
 
 const donationId = `donation-${suffix}`;
 const donationRef = doc(donor.db, "donations", donationId);
@@ -131,9 +142,9 @@ await setDoc(
   doc(partner.db, "organizationApplications", applicationId),
   application,
 );
-await denied("self approval", () =>
-  updateDoc(doc(partner.db, "organizationApplications", applicationId), {
-    status: "approved",
+await denied("other user's application edit", () =>
+  updateDoc(doc(outsider.db, "organizationApplications", applicationId), {
+    name: "Hijacked shelter",
   }),
 );
 const now = Date.now();
@@ -247,9 +258,8 @@ await runTransaction(partner.db, async (tx) => {
     readAt: null,
   });
 });
-await denied("requested donation edit", () =>
-  updateDoc(donationRef, { title: "Changed" }),
-);
+await updateDoc(donationRef, { quantity: "6 boxes" });
+assert.equal((await getDoc(donationRef)).data().quantity, "6 boxes");
 await denied("double request", () =>
   setDoc(doc(partner.db, "orders", donationId), { status: "requested" }),
 );

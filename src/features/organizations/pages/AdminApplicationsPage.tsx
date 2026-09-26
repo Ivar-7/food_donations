@@ -59,7 +59,7 @@ export default function AdminApplicationsPage() {
       <PageHeader
         eyebrow="Partner administration"
         title="Organization applications"
-        description="Review shelters and NGOs waiting to join the FoodBridge community."
+        description="Review shelters and NGOs waiting to join the Okoa Food community."
       />
       {error && (
         <div className="mb-6">

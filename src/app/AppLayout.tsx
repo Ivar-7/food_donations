@@ -21,13 +21,13 @@ function Brand() {
     <Link
       to="/"
       className="inline-flex shrink-0 items-center gap-3"
-      aria-label="FoodBridge home"
+      aria-label="Okoa Food home"
     >
       <span className="flex size-10 items-center justify-center rounded-full bg-forest-700 text-white dark:bg-forest-500 dark:text-forest-950">
         <Sprout size={22} strokeWidth={2.2} aria-hidden="true" />
       </span>
       <span className="text-xl font-bold tracking-tight text-forest-950 dark:text-stone-50">
-        food<span className="font-normal">bridge</span>
+        Okoa<span className="font-normal"> Food</span>
       </span>
     </Link>
   );
@@ -310,7 +310,7 @@ export default function AppLayout() {
           </div>
         </div>
         <div className="border-t border-stone-200 px-4 py-5 text-xs text-stone-500 dark:border-stone-800 dark:text-stone-400 sm:px-8 lg:px-12 2xl:px-20">
-          © {new Date().getFullYear()} FoodBridge. Made for communities that
+          © {new Date().getFullYear()} Okoa Food. Made for communities that
           share.
         </div>
       </footer>

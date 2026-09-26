@@ -4,154 +4,95 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function userPath(id) { return /databases/$(database)/documents/users/$(id); }
     function donationPath(id) { return /databases/$(database)/documents/donations/$(id); }
-    function orderPath(id) { return /databases/$(database)/documents/orders/$(id); }
-    function applicationPath(id) { return /databases/$(database)/documents/organizationApplications/$(id); }
     function organizationPath(id) { return /databases/$(database)/documents/organizations/$(id); }
     function sponsorshipPath(id) { return /databases/$(database)/documents/sponsorships/$(id); }
-    function pledgePath(id, uid) { return /databases/$(database)/documents/sponsorships/$(id)/pledges/$(uid); }
     function isAdmin() { return signedIn() && get(userPath(request.auth.uid)).data.role == 'admin'; }
+    function ownsOrganization(id) {
+      return signedIn() && get(organizationPath(id)).data.ownerUserId == request.auth.uid;
+    }
+    function hasOrganization() {
+      return signedIn() && ownsOrganization(get(userPath(request.auth.uid)).data.organizationId);
+    }
+
     match /users/{userId} {
       allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
       allow create: if signedIn() && request.auth.uid == userId &&
-        request.resource.data.keys().hasOnly(['username', 'email', 'role', 'createdAt']) &&
         request.resource.data.role == 'user' && request.resource.data.email == request.auth.token.email;
-      allow update: if signedIn() && ((request.auth.uid == userId &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['username'])) ||
-        (isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['organizationId']) &&
-        getAfter(applicationPath(request.resource.data.organizationId)).data.status == 'approved' &&
-        getAfter(applicationPath(request.resource.data.organizationId)).data.userId == userId &&
-        getAfter(organizationPath(request.resource.data.organizationId)).data.ownerUserId == userId));
+      allow update: if isAdmin() ||
+        (signedIn() && request.auth.uid == userId &&
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.email == resource.data.email &&
+         request.resource.data.get('organizationId', null) ==
+           resource.data.get('organizationId', null));
       allow delete: if false;
     }
 
     match /donations/{donationId} {
       allow read: if true;
-      allow create: if signedIn() &&
-        request.resource.data.donorId == request.auth.uid && request.resource.data.status == 'available' &&
-        !('orderId' in request.resource.data);
-      allow update: if signedIn() && (
-        (resource.data.donorId == request.auth.uid && resource.data.status == 'available' &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'category', 'quantity', 'location', 'description', 'imageUrl'])) ||
-        (resource.data.status == 'available' && request.resource.data.status == 'requested' &&
-          request.resource.data.orderId == donationId &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'orderId']) &&
-          getAfter(orderPath(donationId)).data.status == 'requested' &&
-          getAfter(orderPath(donationId)).data.requestedBy == request.auth.uid) ||
-        (resource.data.orderId == donationId &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
-          ((resource.data.status == 'requested' && request.resource.data.status == 'pickup' && resource.data.donorId == request.auth.uid) ||
-           (resource.data.status == 'pickup' && request.resource.data.status == 'received' && get(orderPath(donationId)).data.requestedBy == request.auth.uid)) &&
-          getAfter(orderPath(donationId)).data.status == request.resource.data.status));
-      allow delete: if signedIn() && resource.data.donorId == request.auth.uid && resource.data.status == 'available';
+      allow create: if signedIn() && request.resource.data.donorId == request.auth.uid;
+      allow update: if signedIn() &&
+        request.resource.data.donorId == resource.data.donorId &&
+        (resource.data.donorId == request.auth.uid || hasOrganization());
+      allow delete: if signedIn() && resource.data.donorId == request.auth.uid;
     }
 
     match /organizationApplications/{applicationId} {
       allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if signedIn() &&
-        request.resource.data.userId == request.auth.uid && request.resource.data.status == 'pending' &&
-        !('reviewedAt' in request.resource.data) && !('reviewerId' in request.resource.data) &&
-        !('organizationId' in get(userPath(request.auth.uid)).data);
-      allow update: if signedIn() && (
-        (resource.data.userId == request.auth.uid && resource.data.status == 'rejected' &&
-          request.resource.data.status == 'pending' &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'type', 'location', 'description', 'contactEmail', 'status', 'createdAt', 'reviewedAt', 'reviewerId']) &&
-          !('reviewedAt' in request.resource.data) && !('reviewerId' in request.resource.data) &&
-          !('organizationId' in get(userPath(request.auth.uid)).data)) ||
-        (isAdmin() && resource.data.status == 'pending' &&
-          request.resource.data.status in ['approved', 'rejected'] &&
-          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedAt', 'reviewerId']) &&
-          request.resource.data.reviewerId == request.auth.uid &&
-          (request.resource.data.status == 'rejected' ||
-            (getAfter(organizationPath(applicationId)).data.ownerUserId == resource.data.userId &&
-             getAfter(userPath(resource.data.userId)).data.organizationId == applicationId))));
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && request.resource.data.userId == resource.data.userId &&
+        (resource.data.userId == request.auth.uid || isAdmin());
       allow delete: if false;
     }
 
     match /organizations/{organizationId} {
       allow read: if true;
-      allow create: if isAdmin() &&
-        getAfter(applicationPath(organizationId)).data.status == 'approved' &&
-        request.resource.data.ownerUserId == getAfter(applicationPath(organizationId)).data.userId &&
-        request.resource.data.name == getAfter(applicationPath(organizationId)).data.name &&
-        request.resource.data.type == getAfter(applicationPath(organizationId)).data.type &&
-        request.resource.data.location == getAfter(applicationPath(organizationId)).data.location &&
-        request.resource.data.description == getAfter(applicationPath(organizationId)).data.description &&
-        getAfter(userPath(request.resource.data.ownerUserId)).data.organizationId == organizationId;
+      allow create: if isAdmin();
       allow update, delete: if false;
     }
 
     match /orders/{orderId} {
-      allow get: if signedIn() && (resource == null || resource.data.donorId == request.auth.uid || resource.data.requestedBy == request.auth.uid || isAdmin());
-      allow list: if signedIn() && (resource.data.donorId == request.auth.uid || resource.data.requestedBy == request.auth.uid || isAdmin());
-      allow create: if signedIn() && orderId == request.resource.data.donationId &&
-        request.resource.data.requestedBy == request.auth.uid && request.resource.data.status == 'requested' &&
-        get(organizationPath(request.resource.data.organizationId)).data.ownerUserId == request.auth.uid &&
-        request.resource.data.organizationName == get(organizationPath(request.resource.data.organizationId)).data.name &&
-        get(donationPath(orderId)).data.status == 'available' &&
-        get(donationPath(orderId)).data.donorId != 'foodbridge-seed-donor' &&
-        request.resource.data.donorId == get(donationPath(orderId)).data.donorId &&
-        request.resource.data.donorId != request.auth.uid &&
-        request.resource.data.donationTitle == get(donationPath(orderId)).data.title &&
-        getAfter(donationPath(orderId)).data.status == 'requested' &&
-        getAfter(donationPath(orderId)).data.orderId == orderId;
+      allow get: if signedIn() && (resource == null ||
+        resource.data.donorId == request.auth.uid ||
+        resource.data.requestedBy == request.auth.uid || isAdmin());
+      allow list: if signedIn() && (resource.data.donorId == request.auth.uid ||
+        resource.data.requestedBy == request.auth.uid || isAdmin());
+      allow create: if signedIn() && request.resource.data.requestedBy == request.auth.uid &&
+        ownsOrganization(request.resource.data.organizationId) &&
+        request.resource.data.donorId == get(donationPath(orderId)).data.donorId;
       allow update: if signedIn() &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']) &&
-        ((resource.data.status == 'requested' && request.resource.data.status == 'pickup' && resource.data.donorId == request.auth.uid) ||
-         (resource.data.status == 'pickup' && request.resource.data.status == 'received' && resource.data.requestedBy == request.auth.uid)) &&
-        getAfter(donationPath(orderId)).data.status == request.resource.data.status;
+        (resource.data.donorId == request.auth.uid ||
+         resource.data.requestedBy == request.auth.uid) &&
+        request.resource.data.donorId == resource.data.donorId &&
+        request.resource.data.requestedBy == resource.data.requestedBy;
       allow delete: if false;
     }
 
     match /sponsorships/{sponsorshipId} {
       allow read: if true;
-      allow create: if signedIn() &&
-        request.resource.data.ownerUserId == request.auth.uid &&
-        get(organizationPath(request.resource.data.organizationId)).data.ownerUserId == request.auth.uid &&
-        request.resource.data.organizationName == get(organizationPath(request.resource.data.organizationId)).data.name &&
-        request.resource.data.pledgedQuantity == 0 && request.resource.data.status == 'open';
-      allow update: if signedIn() && resource.data.status == 'open' && resource.data.ownerUserId != 'foodbridge-seed-organization' && request.auth.uid != resource.data.ownerUserId &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['pledgedQuantity', 'status']) &&
-        !exists(pledgePath(sponsorshipId, request.auth.uid)) &&
-        getAfter(pledgePath(sponsorshipId, request.auth.uid)).data.userId == request.auth.uid &&
-        request.resource.data.pledgedQuantity == resource.data.pledgedQuantity + getAfter(pledgePath(sponsorshipId, request.auth.uid)).data.quantity &&
-        request.resource.data.pledgedQuantity <= resource.data.targetQuantity &&
-        request.resource.data.status == (request.resource.data.pledgedQuantity == resource.data.targetQuantity ? 'fulfilled' : 'open');
+      allow create: if signedIn() && request.resource.data.ownerUserId == request.auth.uid &&
+        ownsOrganization(request.resource.data.organizationId);
+      allow update: if signedIn() &&
+        resource.data.ownerUserId != 'foodbridge-seed-organization' &&
+        request.auth.uid != resource.data.ownerUserId &&
+        request.resource.data.ownerUserId == resource.data.ownerUserId;
       allow delete: if false;
 
       match /pledges/{userId} {
-        allow read: if signedIn() && (request.auth.uid == userId || get(sponsorshipPath(sponsorshipId)).data.ownerUserId == request.auth.uid);
+        allow read: if signedIn() && (request.auth.uid == userId ||
+          get(sponsorshipPath(sponsorshipId)).data.ownerUserId == request.auth.uid);
         allow create: if signedIn() && request.auth.uid == userId &&
-          request.resource.data.userId == userId && request.resource.data.quantity is int && request.resource.data.quantity > 0 &&
-          get(sponsorshipPath(sponsorshipId)).data.status == 'open' &&
-          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != 'foodbridge-seed-organization' &&
+          request.resource.data.userId == userId &&
           get(sponsorshipPath(sponsorshipId)).data.ownerUserId != userId &&
-          getAfter(sponsorshipPath(sponsorshipId)).data.pledgedQuantity == get(sponsorshipPath(sponsorshipId)).data.pledgedQuantity + request.resource.data.quantity &&
-          getAfter(sponsorshipPath(sponsorshipId)).data.pledgedQuantity <= get(sponsorshipPath(sponsorshipId)).data.targetQuantity;
+          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != 'foodbridge-seed-organization';
         allow update, delete: if false;
       }
     }
 
     match /notifications/{notificationId} {
       allow read: if signedIn() && resource.data.recipientId == request.auth.uid;
-      allow create: if signedIn() &&
-        request.resource.data.actorId == request.auth.uid && request.resource.data.readAt == null &&
-        (
-          (request.resource.data.type in ['application_approved', 'application_rejected'] && isAdmin() &&
-            get(applicationPath(request.resource.data.sourceId)).data.status == 'pending' &&
-            getAfter(applicationPath(request.resource.data.sourceId)).data.status == (request.resource.data.type == 'application_approved' ? 'approved' : 'rejected') &&
-            getAfter(applicationPath(request.resource.data.sourceId)).data.reviewerId == request.auth.uid &&
-            request.resource.data.recipientId == getAfter(applicationPath(request.resource.data.sourceId)).data.userId) ||
-          (request.resource.data.type in ['order_requested', 'order_pickup', 'order_received'] &&
-            notificationId == request.resource.data.type + '_' + request.resource.data.sourceId &&
-            getAfter(orderPath(request.resource.data.sourceId)).data.status == (request.resource.data.type == 'order_requested' ? 'requested' : request.resource.data.type == 'order_pickup' ? 'pickup' : 'received') &&
-            request.resource.data.recipientId == (request.resource.data.type == 'order_pickup' ? getAfter(orderPath(request.resource.data.sourceId)).data.requestedBy : getAfter(orderPath(request.resource.data.sourceId)).data.donorId) &&
-            request.resource.data.actorId == (request.resource.data.type == 'order_pickup' ? getAfter(orderPath(request.resource.data.sourceId)).data.donorId : getAfter(orderPath(request.resource.data.sourceId)).data.requestedBy)) ||
-          (request.resource.data.type == 'pledge_received' &&
-            notificationId == 'pledge_received_' + request.resource.data.sourceId + '_' + request.auth.uid &&
-            getAfter(pledgePath(request.resource.data.sourceId, request.auth.uid)).data.userId == request.auth.uid &&
-            request.resource.data.recipientId == getAfter(sponsorshipPath(request.resource.data.sourceId)).data.ownerUserId));
-      allow update: if signedIn() && resource.data.recipientId == request.auth.uid && resource.data.readAt == null &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readAt']);
+      allow create: if signedIn() && request.resource.data.actorId == request.auth.uid;
+      allow update: if signedIn() && resource.data.recipientId == request.auth.uid &&
+        request.resource.data.recipientId == resource.data.recipientId;
       allow delete: if false;
     }
 

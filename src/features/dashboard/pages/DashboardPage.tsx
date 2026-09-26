@@ -203,7 +203,7 @@ export default function DashboardPage() {
               <>
                 <p className="font-semibold">Represent a shelter or NGO?</p>
                 <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
-                  Apply to join FoodBridge and make your organization visible to
+                  Apply to join Okoa Food and make your organization visible to
                   donors.
                 </p>
                 <Link

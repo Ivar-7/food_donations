@@ -73,7 +73,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
         <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-950/10 to-transparent" />
         <div className="absolute bottom-0 left-0 max-w-2xl px-12 pb-16 text-white 2xl:px-20">
           <p className="text-xs font-bold uppercase tracking-widest text-white/80">
-            FoodBridge community
+            Okoa Food community
           </p>
           <h2 className="mt-5 font-display text-5xl leading-tight xl:text-6xl">
             Good things grow when we share.
@@ -97,7 +97,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
               {resetMode
                 ? "Account help"
                 : signup
-                  ? "Join FoodBridge"
+                  ? "Join Okoa Food"
                   : "Welcome back"}
             </p>
             <h1 className="mt-4 font-display text-4xl leading-tight tracking-tight sm:text-5xl">
@@ -226,7 +226,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
               </button>
             ) : (
               <>
-                {signup ? "Already have an account?" : "New to FoodBridge?"}{" "}
+                {signup ? "Already have an account?" : "New to Okoa Food?"}{" "}
                 <Link
                   className="ml-1 font-bold text-forest-700 dark:text-forest-500"
                   to={signup ? "/login" : "/signup"}

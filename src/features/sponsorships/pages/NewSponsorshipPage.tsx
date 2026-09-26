@@ -150,7 +150,7 @@ export default function NewSponsorshipPage() {
             />
           </label>
           <p className="text-sm text-stone-500 dark:text-stone-400">
-            Pledges are in-kind commitments. FoodBridge does not handle payments
+            Pledges are in-kind commitments. Okoa Food does not handle payments
             or delivery.
           </p>
           {error && <Notice error>{error}</Notice>}

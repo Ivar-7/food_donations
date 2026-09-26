@@ -1,7 +1,7 @@
 export type AppError = { message: string; cause?: unknown };
 
 export function reportClientError(cause: unknown) {
-  console.error("[FoodBridge]", cause);
+  console.error("[Okoa Food]", cause);
 }
 
 export function toAppError(cause: unknown): AppError {

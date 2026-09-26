@@ -249,7 +249,7 @@ async function seedCollection(collectionName, samples, fieldsForSample) {
 await seedCollection("donations", donationSamples, () => ({
   status: "available",
   donorId: "foodbridge-seed-donor",
-  donorName: "FoodBridge sample",
+  donorName: "Okoa Food sample",
 }));
 await seedCollection("organizations", organizationSamples, () => ({}));
 await seedCollection("sponsorships", sponsorshipSamples, () => ({
