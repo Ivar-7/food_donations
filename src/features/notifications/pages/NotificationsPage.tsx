@@ -48,14 +48,14 @@ export default function NotificationsPage() {
         <button
           type="button"
           onClick={() => setFilter("all")}
-          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "all" ? "bg-forest-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
+          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "all" ? "bg-pink-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
         >
           All
         </button>
         <button
           type="button"
           onClick={() => setFilter("unread")}
-          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "unread" ? "bg-forest-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
+          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "unread" ? "bg-pink-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
         >
           Unread
         </button>
@@ -74,10 +74,10 @@ export default function NotificationsPage() {
           {visible.map((item) => (
             <article
               key={item.id}
-              className={`flex flex-col gap-4 border p-5 sm:flex-row sm:items-center sm:justify-between ${item.readAt === null ? "border-forest-200 bg-forest-50 dark:border-forest-800 dark:bg-forest-900" : "border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"}`}
+              className={`flex flex-col gap-4 border p-5 sm:flex-row sm:items-center sm:justify-between ${item.readAt === null ? "border-pink-200 bg-pink-50 dark:border-pink-800 dark:bg-pink-900" : "border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"}`}
             >
               <div className="flex items-start gap-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-forest-700 dark:bg-stone-800 dark:text-forest-100">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-pink-700 dark:bg-stone-800 dark:text-pink-100">
                   <Bell size={18} />
                 </span>
                 <div>
@@ -90,7 +90,7 @@ export default function NotificationsPage() {
               <div className="flex shrink-0 items-center gap-4 pl-14 sm:pl-0">
                 <Link
                   to={notificationLink(item)}
-                  className="inline-flex items-center gap-1 text-sm font-bold text-forest-700 dark:text-forest-500"
+                  className="inline-flex items-center gap-1 text-sm font-bold text-pink-700 dark:text-pink-300"
                 >
                   View <ArrowUpRight size={15} />
                 </Link>
@@ -99,7 +99,7 @@ export default function NotificationsPage() {
                     type="button"
                     disabled={pendingId === item.id}
                     onClick={() => void markRead(item.id)}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-stone-600 hover:text-forest-700 disabled:opacity-50 dark:text-stone-300 dark:hover:text-forest-500"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-stone-600 hover:text-pink-700 disabled:opacity-50 dark:text-stone-300 dark:hover:text-pink-500"
                   >
                     <Check size={15} />{" "}
                     {pendingId === item.id ? "Saving…" : "Mark read"}

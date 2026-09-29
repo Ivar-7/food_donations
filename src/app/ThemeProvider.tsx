@@ -6,11 +6,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const stored =
       localStorage.getItem("okoa-food-theme") ??
       localStorage.getItem("foodbridge-theme");
-    return stored === "dark" || stored === "light"
-      ? stored
-      : matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+    return stored === "dark" || stored === "light" ? stored : "light";
   });
   useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");

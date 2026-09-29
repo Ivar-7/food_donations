@@ -6,4 +6,4 @@ New applications use the applicant's user ID as the document ID. Submission chec
 
 Security rules must allow only admins to review, require the related organization and user changes during approval, and allow an applicant to resubmit only their own rejected document. The admin route must be lazy loaded and role protected by the app router.
 
-The seed command also adds three clearly marked sample partner profiles with Unsplash photos. They have no real owner account or approval and are excluded from the home page impact totals.
+The seed command adds three fictional presentation organizations, each linked to its own demo sign-in account. They can request donations and publish needs using the ordinary APIs. Existing members still register through administrator review; seeding is a privileged CLI operation and never grants admin access to demo accounts.

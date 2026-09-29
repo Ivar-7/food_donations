@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 
 export const fieldClass =
-  "w-full rounded-lg border border-stone-300 bg-white px-4 py-3.5 text-base text-stone-900 placeholder:text-stone-400 focus:border-forest-600 focus:ring-2 focus:ring-forest-100 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-forest-900";
+  "w-full rounded-2xl border border-stone-300 bg-white px-4 py-3.5 text-base text-stone-900 placeholder:text-stone-400 focus:border-pink-600 focus:ring-2 focus:ring-pink-100 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:focus:ring-pink-900";
 export const primaryClass =
-  "inline-flex items-center justify-center gap-2 rounded-lg bg-forest-700 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-forest-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-forest-500 dark:text-forest-950 dark:hover:bg-forest-100";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-pink-700 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-pink-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-pink-300 dark:text-pink-950 dark:hover:bg-pink-200";
 export const secondaryClass =
-  "inline-flex items-center justify-center gap-2 rounded-lg border border-stone-300 bg-transparent px-6 py-3.5 text-sm font-semibold text-stone-800 transition-colors hover:bg-stone-100 dark:border-stone-600 dark:text-stone-100 dark:hover:bg-stone-800";
+  "inline-flex items-center justify-center gap-2 rounded-full border border-pink-200 bg-white px-6 py-3.5 text-sm font-semibold text-pink-800 transition-colors hover:bg-pink-50 dark:border-pink-800 dark:bg-stone-900 dark:text-pink-200 dark:hover:bg-pink-950";
 
 export function PageHeader({
   eyebrow,
@@ -22,7 +22,7 @@ export function PageHeader({
   return (
     <div className="mb-10 flex flex-col gap-5 border-b border-stone-200 pb-8 sm:flex-row sm:items-end sm:justify-between dark:border-stone-800">
       <div>
-        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
           {eyebrow}
         </p>
         <h1 className="font-display text-4xl tracking-tight sm:text-5xl">
@@ -49,9 +49,9 @@ export function EmptyState({
   href?: string;
 }) {
   return (
-    <div className="border border-stone-200 bg-white px-6 py-12 text-center dark:border-stone-800 dark:bg-stone-900 sm:px-10">
+    <div className="rounded-3xl border border-stone-200 bg-white px-6 py-12 text-center dark:border-stone-800 dark:bg-stone-900 sm:px-10">
       <div
-        className="mx-auto mb-5 flex size-12 items-center justify-center rounded-full bg-forest-100 text-xl text-forest-700 dark:bg-forest-900 dark:text-forest-100"
+        className="mx-auto mb-5 flex size-12 items-center justify-center rounded-full bg-pink-100 text-xl text-pink-700 dark:bg-pink-900 dark:text-pink-100"
         aria-hidden="true"
       >
         ✳
@@ -79,7 +79,7 @@ export function Notice({
   return (
     <p
       role={error ? "alert" : "status"}
-      className={`rounded-lg border px-4 py-3 text-sm ${error ? "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" : "border-forest-100 bg-forest-50 text-forest-800 dark:border-forest-700 dark:bg-forest-900 dark:text-forest-100"}`}
+      className={`rounded-2xl border px-4 py-3 text-sm ${error ? "border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" : "border-pink-100 bg-pink-50 text-pink-800 dark:border-pink-700 dark:bg-pink-900 dark:text-pink-100"}`}
     >
       {children}
     </p>

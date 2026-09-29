@@ -16,7 +16,7 @@ function OrderList({ title, items }: { title: string; items: Order[] }) {
             <Link
               key={item.id}
               to={`/orders/${item.id}`}
-              className="flex items-center justify-between gap-4 border border-stone-200 bg-white p-5 transition-colors hover:border-forest-500 dark:border-stone-800 dark:bg-stone-900"
+              className="flex items-center justify-between gap-4 border border-stone-200 bg-white p-5 transition-colors hover:border-pink-500 dark:border-stone-800 dark:bg-stone-900"
             >
               <div className="min-w-0">
                 <p className="truncate font-semibold">{item.donationTitle}</p>
@@ -26,12 +26,12 @@ function OrderList({ title, items }: { title: string; items: Order[] }) {
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-3">
-                <span className="rounded-full bg-forest-100 px-3 py-1 text-xs font-semibold capitalize text-forest-800 dark:bg-forest-900 dark:text-forest-100">
+                <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-semibold capitalize text-pink-800 dark:bg-pink-900 dark:text-pink-100">
                   {item.status}
                 </span>
                 <ArrowUpRight
                   size={17}
-                  className="text-forest-700 dark:text-forest-500"
+                  className="text-pink-700 dark:text-pink-300"
                   aria-hidden="true"
                 />
               </div>
@@ -39,7 +39,7 @@ function OrderList({ title, items }: { title: string; items: Order[] }) {
           ))}
         </div>
       ) : (
-        <p className="border border-stone-200 bg-white p-6 text-sm text-stone-600 dark:border-stone-800 dark:bg-stone-900 dark:text-stone-400">
+        <p className="rounded-3xl border border-stone-200 bg-white p-6 text-sm text-stone-600 dark:border-stone-800 dark:bg-stone-900 dark:text-stone-400">
           Nothing here yet.
         </p>
       )}

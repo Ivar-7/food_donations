@@ -74,7 +74,7 @@ function ProfileForm({
         </label>
         <div>
           <p className="text-sm font-semibold">Email address</p>
-          <div className="mt-2 flex items-center gap-3 rounded-lg border border-stone-200 bg-stone-50 px-4 py-3.5 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300">
+          <div className="mt-2 flex items-center gap-3 rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3.5 text-sm text-stone-600 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300">
             <Mail size={17} aria-hidden="true" />{" "}
             <span className="break-all">
               {user.email ?? "No email available"}
@@ -113,7 +113,7 @@ export default function ProfilePage() {
       />
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
-          <div className="flex size-16 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+          <div className="flex size-16 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
             <UserRound size={28} />
           </div>
           <h2 className="mt-6 font-display text-3xl">
@@ -125,13 +125,13 @@ export default function ProfilePage() {
           </p>
           <Link
             to="/dashboard"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-pink-700 dark:text-pink-300"
           >
             Back to dashboard <ArrowRight size={16} />
           </Link>
         </div>
         <div className="lg:col-span-8 xl:col-span-6">
-          <div className="border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900 sm:p-8">
+          <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900 sm:p-8">
             {profileLoading ? (
               <p role="status" className="text-stone-600 dark:text-stone-400">
                 Loading your profile…

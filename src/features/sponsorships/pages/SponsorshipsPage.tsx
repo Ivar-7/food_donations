@@ -10,6 +10,7 @@ import {
   primaryClass,
 } from "../../../shared/ui/Elements";
 import { useSponsorships } from "../state/useSponsorships";
+import NeedsRegistration from "../components/NeedsRegistration";
 
 export default function SponsorshipsPage() {
   const { profile } = useAuth();
@@ -23,7 +24,7 @@ export default function SponsorshipsPage() {
       <PageHeader
         eyebrow="In-kind support"
         title="Community needs"
-        description="Explore sample needs and requests from approved organizations. Pledge items to real organizations you can support."
+        description="Small acts of care add up. Find the food, supplies and essentials our community partners need, and pledge what you can share."
         action={
           profile?.organizationId ? (
             <Link to="/sponsorships/new" className={primaryClass}>
@@ -32,18 +33,19 @@ export default function SponsorshipsPage() {
           ) : undefined
         }
       />
+      <NeedsRegistration />
       <div className="mb-8 flex gap-2" role="group" aria-label="Filter needs">
         <button
           type="button"
           onClick={() => setFilter("open")}
-          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "open" ? "bg-forest-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
+          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "open" ? "bg-pink-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
         >
           Open needs
         </button>
         <button
           type="button"
           onClick={() => setFilter("all")}
-          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "all" ? "bg-forest-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
+          className={`rounded-full px-5 py-2 text-sm font-semibold ${filter === "all" ? "bg-pink-700 text-white" : "border border-stone-300 text-stone-600 dark:border-stone-700 dark:text-stone-300"}`}
         >
           All needs
         </button>
@@ -58,7 +60,7 @@ export default function SponsorshipsPage() {
             <Link
               key={item.id}
               to={`/sponsorships/${item.id}`}
-              className="flex h-full flex-col overflow-hidden border border-stone-200 bg-white transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900"
+              className="flex h-full flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900"
             >
               {item.imageUrl && (
                 <img
@@ -71,32 +73,33 @@ export default function SponsorshipsPage() {
               )}
               <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-start justify-between gap-3">
-                  <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                     <HeartHandshake size={22} strokeWidth={1.7} />
                   </span>
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "open" ? "bg-forest-100 text-forest-800 dark:bg-forest-900 dark:text-forest-100" : "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300"}`}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${item.status === "open" ? "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-100" : "bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300"}`}
                   >
                     {item.status === "open" ? "Open" : "Fulfilled"}
                   </span>
                 </div>
-                <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                <p className="mt-6 text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
                   {item.organizationName}
                 </p>
-                {item.ownerUserId === "foodbridge-seed-organization" && (
-                  <span className="mt-2 self-start rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-                    Sample need
-                  </span>
-                )}
                 <h2 className="mt-2 font-display text-2xl">{item.title}</h2>
                 <p className="mt-3 line-clamp-3 flex-1 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                   {item.description}
                 </p>
                 <div className="mt-6 border-t border-stone-200 pt-4 text-sm font-semibold dark:border-stone-800">
+                  <progress
+                    aria-label={`${item.title} pledge progress`}
+                    value={item.pledgedQuantity}
+                    max={item.targetQuantity}
+                    className="mb-3 h-2 w-full overflow-hidden rounded-full accent-pink-600 dark:accent-pink-300"
+                  />
                   {item.pledgedQuantity} of {item.targetQuantity} {item.unit}{" "}
                   pledged
                 </div>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-forest-700 dark:text-forest-500">
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-pink-700 dark:text-pink-300">
                   View need <ArrowUpRight size={15} />
                 </span>
               </div>

@@ -10,7 +10,7 @@ export default function AboutPage() {
         description="Okoa Food helps people list surplus food and essentials and helps approved shelters and NGOs discover what is available nearby."
       />
       <div className="grid gap-6 md:grid-cols-2">
-        <section className="bg-forest-50 p-8 dark:bg-forest-900 lg:p-12">
+        <section className="bg-pink-50 p-8 dark:bg-pink-900 lg:p-12">
           <h2 className="text-xl font-bold">For donors</h2>
           <p className="mt-3 leading-relaxed text-stone-600 dark:text-stone-300">
             Create an account, describe your donation, and share its pickup

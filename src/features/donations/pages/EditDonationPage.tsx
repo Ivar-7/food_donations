@@ -31,7 +31,7 @@ export default function EditDonationPage() {
     <div className="w-full px-4 py-12 sm:px-8 lg:px-12 lg:py-16 2xl:px-20">
       <Link
         to={donation ? `/donations/${donation.id}` : "/dashboard"}
-        className="mb-9 inline-flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300 dark:hover:text-forest-400"
+        className="mb-9 inline-flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-pink-700 dark:text-stone-300 dark:hover:text-pink-400"
       >
         <ArrowLeft size={16} aria-hidden="true" /> Back to listing
       </Link>
@@ -70,7 +70,7 @@ export default function EditDonationPage() {
       ) : (
         <div className="grid gap-8 xl:grid-cols-12 xl:gap-14">
           <aside className="xl:col-span-4">
-            <div className="border-l-4 border-forest-600 pl-6">
+            <div className="border-l-4 border-pink-600 pl-6">
               <p className="font-display text-2xl leading-snug sm:text-3xl">
                 Keep your community in the loop.
               </p>

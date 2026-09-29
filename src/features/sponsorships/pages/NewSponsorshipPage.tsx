@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/authContext";
 import { toAppError } from "../../../shared/errors/appError";
 import {
@@ -12,6 +12,7 @@ import {
 import { createSponsorship } from "../api/sponsorships.api";
 import { validateSponsorship } from "../sponsorship.schema";
 import { sponsorshipsKeys } from "../state/sponsorships.keys";
+import NeedsRegistration from "../components/NeedsRegistration";
 
 export default function NewSponsorshipPage() {
   const { user, profile, profileLoading } = useAuth();
@@ -66,17 +67,11 @@ export default function NewSponsorshipPage() {
       {profileLoading ? (
         <p role="status">Checking your organization…</p>
       ) : !profile?.organizationId ? (
-        <Notice error>
-          Only approved organizations can post a need.{" "}
-          <Link to="/organizations/apply" className="font-bold underline">
-            Apply as an organization
-          </Link>
-          .
-        </Notice>
+        <NeedsRegistration />
       ) : (
         <form
           onSubmit={(event) => void submit(event)}
-          className="max-w-4xl space-y-5 border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:p-10"
+          className="max-w-4xl space-y-5 rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:p-10"
         >
           <label className="block text-sm font-semibold">
             What do you need?

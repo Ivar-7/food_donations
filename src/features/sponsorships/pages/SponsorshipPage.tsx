@@ -65,7 +65,7 @@ export default function SponsorshipPage() {
         action={
           <Link
             to="/sponsorships"
-            className="inline-flex items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+            className="inline-flex items-center gap-2 text-sm font-bold text-pink-700 dark:text-pink-300"
           >
             <ArrowLeft size={16} /> All needs
           </Link>
@@ -84,7 +84,7 @@ export default function SponsorshipPage() {
         />
       ) : (
         <div className="grid gap-8 lg:grid-cols-12">
-          <section className="border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-7">
+          <section className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-7">
             {item.imageUrl && (
               <img
                 src={item.imageUrl}
@@ -93,7 +93,7 @@ export default function SponsorshipPage() {
                 referrerPolicy="no-referrer"
               />
             )}
-            <div className="flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+            <div className="flex size-14 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
               <HeartHandshake size={27} strokeWidth={1.6} />
             </div>
             <h2 className="mt-6 font-display text-3xl">
@@ -103,12 +103,18 @@ export default function SponsorshipPage() {
               {item.description}
             </p>
             <div className="mt-8 border-t border-stone-200 pt-6 dark:border-stone-800">
-              <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+              <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
                 Progress
               </p>
               <p className="mt-2 font-display text-3xl">
                 {item.pledgedQuantity} of {item.targetQuantity} {item.unit}
               </p>
+              <progress
+                aria-label="Pledge progress"
+                value={item.pledgedQuantity}
+                max={item.targetQuantity}
+                className="mt-4 h-3 w-full overflow-hidden rounded-full accent-pink-600 dark:accent-pink-300"
+              />
               <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
                 {item.status === "fulfilled"
                   ? "This need is fully pledged."
@@ -117,18 +123,13 @@ export default function SponsorshipPage() {
             </div>
           </section>
           <aside className="lg:col-span-5">
-            <div className="border border-stone-200 bg-forest-50 p-6 dark:border-forest-800 dark:bg-forest-900 sm:p-8">
+            <div className="border border-stone-200 bg-pink-50 p-6 dark:border-pink-800 dark:bg-pink-900 sm:p-8">
               <h2 className="font-display text-3xl">Make a pledge</h2>
               <p className="mt-3 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
                 Commit only to items you can provide. Okoa Food records the
                 pledge but does not process payments or arrange delivery.
               </p>
-              {item.ownerUserId === "foodbridge-seed-organization" ? (
-                <Notice>
-                  This is a sample need for exploring Okoa Food. It cannot
-                  receive pledges.
-                </Notice>
-              ) : !user ? (
+              {!user ? (
                 <Link
                   to="/login"
                   state={{ from: `/sponsorships/${item.id}` }}

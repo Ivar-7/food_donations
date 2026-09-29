@@ -95,14 +95,14 @@ export default function AdminApplicationsPage() {
               >
                 <div className="flex-1 p-6 sm:p-8">
                   <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                    <div className="flex size-12 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                       <Building2 size={23} aria-hidden="true" />
                     </div>
                     <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-900 dark:bg-amber-900 dark:text-amber-100">
                       Pending review
                     </span>
                   </div>
-                  <p className="mt-6 text-xs font-bold uppercase tracking-widest text-forest-700 dark:text-forest-400">
+                  <p className="mt-6 text-xs font-bold uppercase tracking-widest text-pink-700 dark:text-pink-400">
                     {item.type}
                   </p>
                   <h2 className="mt-1 font-display text-2xl sm:text-3xl">

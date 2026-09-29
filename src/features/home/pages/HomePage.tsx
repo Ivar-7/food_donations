@@ -7,7 +7,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import donationVolunteers from "../../../assets/food-donation-volunteers.jpg";
+import childrenReceivingDonations from "../../../assets/children-receiving-donations.png";
 import { useAvailableDonations } from "../../donations/state/useDonations";
 import DonationCard from "../../donations/components/DonationCard";
 import { useOrganizations } from "../../organizations/state/useOrganizations";
@@ -48,17 +48,17 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="bg-stone-100 dark:bg-forest-950">
+      <section className="bg-pink-100/50 dark:bg-pink-950/40">
         <div className="grid min-h-screen lg:min-h-0 lg:grid-cols-12">
           <div className="flex flex-col justify-center px-4 pb-14 pt-16 sm:px-8 sm:py-20 lg:col-span-5 lg:px-12 lg:py-28 2xl:px-20">
-            <div className="mb-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-forest-700 dark:text-forest-500">
-              <span className="h-px w-8 bg-forest-700 dark:bg-forest-500" />
+            <div className="mb-8 flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-pink-700 dark:text-pink-300">
+              <span className="h-px w-8 bg-pink-700 dark:bg-pink-500" />
               Good food deserves a second table
             </div>
-            <h1 className="max-w-2xl font-display text-5xl leading-none tracking-tight text-forest-950 dark:text-stone-50 sm:text-6xl xl:text-7xl 2xl:text-8xl">
+            <h1 className="max-w-2xl font-display text-5xl leading-none tracking-tight text-pink-950 dark:text-stone-50 sm:text-6xl xl:text-7xl 2xl:text-8xl">
               More to share.
               <br />
-              <span className="italic text-forest-600 dark:text-forest-500">
+              <span className="italic text-pink-600 dark:text-pink-300">
                 Less to waste.
               </span>
             </h1>
@@ -77,36 +77,30 @@ export default function HomePage() {
             </div>
             <div className="mt-12 flex flex-wrap gap-x-6 gap-y-3 border-t border-stone-300 pt-6 text-xs font-semibold uppercase tracking-wide text-stone-500 dark:border-stone-700 dark:text-stone-400">
               <span className="flex items-center gap-2">
-                <Leaf
-                  size={16}
-                  className="text-forest-600 dark:text-forest-500"
-                />{" "}
+                <Leaf size={16} className="text-pink-600 dark:text-pink-300" />{" "}
                 Less waste
               </span>
               <span className="flex items-center gap-2">
                 <MapPin
                   size={16}
-                  className="text-forest-600 dark:text-forest-500"
+                  className="text-pink-600 dark:text-pink-300"
                 />{" "}
                 Local sharing
               </span>
               <span className="flex items-center gap-2">
-                <Heart
-                  size={16}
-                  className="text-forest-600 dark:text-forest-500"
-                />{" "}
+                <Heart size={16} className="text-pink-600 dark:text-pink-300" />{" "}
                 More care
               </span>
             </div>
           </div>
-          <div className="relative min-h-80 overflow-hidden sm:min-h-96 lg:col-span-7 lg:min-h-screen">
+          <div className="relative m-4 min-h-80 overflow-hidden rounded-3xl sm:m-6 sm:min-h-96 lg:col-span-7 lg:min-h-0">
             <img
-              src={donationVolunteers}
-              alt="Volunteers sorting donated food for community distribution"
+              src={childrenReceivingDonations}
+              alt="Illustrative image of a volunteer handing donated groceries to children and their parent"
               className="absolute inset-0 h-full w-full object-cover object-center"
               fetchPriority="high"
             />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-forest-950/80 to-transparent px-6 pb-7 pt-24 text-white sm:px-10">
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-pink-950/80 to-transparent px-6 pb-7 pt-24 text-white sm:px-10">
               <p className="text-xs font-bold uppercase tracking-widest text-white/80">
                 A better path for what we have
               </p>
@@ -122,7 +116,7 @@ export default function HomePage() {
 
       <section className="grid gap-10 border-b border-stone-200 px-4 py-20 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-28 2xl:px-20 dark:border-stone-800">
         <div className="lg:col-span-5">
-          <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+          <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
             The idea is simple
           </p>
           <h2 className="mt-5 max-w-xl font-display text-4xl leading-tight tracking-tight sm:text-5xl xl:text-6xl">
@@ -134,7 +128,7 @@ export default function HomePage() {
           </p>
           <Link
             to="/about"
-            className="mt-7 inline-flex items-center gap-2 border-b border-forest-700 pb-1 text-sm font-bold text-forest-700 dark:border-forest-500 dark:text-forest-500"
+            className="mt-7 inline-flex items-center gap-2 border-b border-pink-700 pb-1 text-sm font-bold text-pink-700 dark:border-pink-500 dark:text-pink-300"
           >
             How Okoa Food works <ArrowUpRight size={16} />
           </Link>
@@ -145,7 +139,7 @@ export default function HomePage() {
               key={step.number}
               className="grid gap-4 border-t border-stone-200 py-6 sm:grid-cols-12 sm:gap-8 dark:border-stone-800"
             >
-              <span className="text-sm font-bold text-forest-600 dark:text-forest-500 sm:col-span-2">
+              <span className="text-sm font-bold text-pink-600 dark:text-pink-300 sm:col-span-2">
                 {step.number}
               </span>
               <div className="sm:col-span-10">
@@ -164,7 +158,7 @@ export default function HomePage() {
       <section className="bg-white px-4 py-20 sm:px-8 lg:px-12 lg:py-28 2xl:px-20 dark:bg-stone-900">
         <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+            <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
               Community board
             </p>
             <h2 className="mt-4 font-display text-4xl tracking-tight sm:text-5xl">
@@ -176,7 +170,7 @@ export default function HomePage() {
           </div>
           <Link
             to="/donations"
-            className="inline-flex items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+            className="inline-flex items-center gap-2 text-sm font-bold text-pink-700 dark:text-pink-300"
           >
             View all donations <ArrowUpRight size={17} />
           </Link>
@@ -217,23 +211,23 @@ export default function HomePage() {
         )}
       </section>
 
-      <section className="border-t border-stone-200 bg-stone-50 px-4 py-20 sm:px-8 lg:px-12 lg:py-28 2xl:px-20 dark:border-stone-800 dark:bg-forest-950">
+      <section className="border-t border-stone-200 bg-stone-50 px-4 py-20 sm:px-8 lg:px-12 lg:py-28 2xl:px-20 dark:border-stone-800 dark:bg-pink-950">
         <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+            <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
               Local partners
             </p>
             <h2 className="mt-4 font-display text-4xl tracking-tight sm:text-5xl">
               People putting care to work.
             </h2>
             <p className="mt-3 max-w-2xl text-stone-600 dark:text-stone-400">
-              Explore sample partner profiles and approved organizations sharing
+              Meet community kitchens, shelters and organizations sharing
               resources across the community.
             </p>
           </div>
           <Link
             to="/organizations"
-            className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+            className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-pink-700 dark:text-pink-300"
           >
             Meet our partners <ArrowUpRight size={17} />
           </Link>
@@ -263,7 +257,7 @@ export default function HomePage() {
             {organizations.data.slice(0, 3).map((item) => (
               <article
                 key={item.id}
-                className="overflow-hidden border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"
+                className="overflow-hidden rounded-3xl border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900"
               >
                 {item.imageUrl && (
                   <img
@@ -276,19 +270,14 @@ export default function HomePage() {
                 )}
                 <div className="p-7">
                   {!item.imageUrl && (
-                    <span className="flex size-12 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                    <span className="flex size-12 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                       <Building2 size={22} />
                     </span>
                   )}
                   <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+                    <span className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
                       {item.type}
                     </span>
-                    {item.ownerUserId === "foodbridge-seed-organization" && (
-                      <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-                        Sample
-                      </span>
-                    )}
                   </div>
                   <h3 className="mt-2 font-display text-2xl">{item.name}</h3>
                   <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
@@ -312,10 +301,10 @@ export default function HomePage() {
         )}
       </section>
 
-      <section className="bg-forest-800 px-4 py-16 text-white sm:px-8 lg:px-12 lg:py-20 2xl:px-20 dark:bg-forest-900">
+      <section className="bg-pink-800 px-4 py-16 text-white sm:px-8 lg:px-12 lg:py-20 2xl:px-20 dark:bg-pink-900">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-forest-100">
+            <p className="text-xs font-bold uppercase tracking-widest text-pink-100">
               Bring something to the table
             </p>
             <h2 className="mt-4 max-w-4xl font-display text-4xl leading-tight sm:text-5xl xl:text-6xl">
@@ -324,7 +313,7 @@ export default function HomePage() {
           </div>
           <Link
             to="/signup"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-white px-6 py-3.5 text-sm font-bold text-forest-800 transition-colors hover:bg-forest-50 dark:bg-forest-100 dark:hover:bg-white"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-pink-800 transition-colors hover:bg-pink-50 dark:bg-pink-100 dark:hover:bg-white"
           >
             Get started <ArrowUpRight size={17} />
           </Link>

@@ -72,7 +72,7 @@ export default function DonationDetailPage() {
     <div className="w-full px-4 py-10 sm:px-8 lg:px-12 lg:py-14 2xl:px-20">
       <Link
         to="/donations"
-        className="mb-9 inline-flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300 dark:hover:text-forest-400"
+        className="mb-9 inline-flex items-center gap-2 text-sm font-semibold text-stone-600 hover:text-pink-700 dark:text-stone-300 dark:hover:text-pink-400"
       >
         <ArrowLeft size={16} aria-hidden="true" /> All donations
       </Link>
@@ -117,14 +117,9 @@ export default function DonationDetailPage() {
               )}
               <div className="border-b border-stone-200 pb-8 dark:border-stone-800">
                 <div className="mb-6 flex flex-wrap items-center gap-3">
-                  <span className="rounded-full bg-forest-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                  <span className="rounded-full bg-pink-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                     {donation.category}
                   </span>
-                  {donation.donorId === "foodbridge-seed-donor" && (
-                    <span className="rounded-full bg-amber-100 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-                      Sample listing
-                    </span>
-                  )}
                   <span className="rounded-full border border-stone-300 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-stone-600 dark:border-stone-700 dark:text-stone-300">
                     {statusText[donation.status]}
                   </span>
@@ -138,7 +133,7 @@ export default function DonationDetailPage() {
               </div>
               <div className="grid gap-6 border-b border-stone-200 py-8 sm:grid-cols-2 dark:border-stone-800">
                 <div className="flex gap-4">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                     <Package size={20} aria-hidden="true" />
                   </span>
                   <div>
@@ -151,7 +146,7 @@ export default function DonationDetailPage() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                     <MapPin size={20} aria-hidden="true" />
                   </span>
                   <div>
@@ -180,8 +175,8 @@ export default function DonationDetailPage() {
               </div>
             </article>
             <aside className="lg:col-span-4">
-              <div className="border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8">
-                <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+              <div className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8">
+                <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
                   Next step
                 </p>
                 <h2 className="mt-3 font-display text-2xl sm:text-3xl">
@@ -213,7 +208,7 @@ export default function DonationDetailPage() {
                     <button
                       type="button"
                       onClick={() => setConfirmDelete(true)}
-                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-200 px-6 py-3.5 text-sm font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950"
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-200 px-6 py-3.5 text-sm font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950"
                     >
                       <Trash2 size={16} aria-hidden="true" /> Remove listing
                     </button>
@@ -250,7 +245,7 @@ export default function DonationDetailPage() {
                       type="button"
                       disabled={deleting}
                       onClick={() => void remove()}
-                      className="rounded-lg bg-red-700 px-5 py-3 text-sm font-semibold text-white hover:bg-red-800 disabled:opacity-50"
+                      className="rounded-2xl bg-red-700 px-5 py-3 text-sm font-semibold text-white hover:bg-red-800 disabled:opacity-50"
                     >
                       {deleting ? "Removing…" : "Yes, remove it"}
                     </button>
@@ -258,7 +253,7 @@ export default function DonationDetailPage() {
                       type="button"
                       disabled={deleting}
                       onClick={() => setConfirmDelete(false)}
-                      className="rounded-lg px-5 py-3 text-sm font-semibold text-red-800 dark:text-red-200"
+                      className="rounded-2xl px-5 py-3 text-sm font-semibold text-red-800 dark:text-red-200"
                     >
                       Keep listing
                     </button>

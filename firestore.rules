@@ -72,7 +72,6 @@ service cloud.firestore {
       allow create: if signedIn() && request.resource.data.ownerUserId == request.auth.uid &&
         ownsOrganization(request.resource.data.organizationId);
       allow update: if signedIn() &&
-        resource.data.ownerUserId != 'foodbridge-seed-organization' &&
         request.auth.uid != resource.data.ownerUserId &&
         request.resource.data.ownerUserId == resource.data.ownerUserId;
       allow delete: if false;
@@ -82,8 +81,7 @@ service cloud.firestore {
           get(sponsorshipPath(sponsorshipId)).data.ownerUserId == request.auth.uid);
         allow create: if signedIn() && request.auth.uid == userId &&
           request.resource.data.userId == userId &&
-          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != userId &&
-          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != 'foodbridge-seed-organization';
+          get(sponsorshipPath(sponsorshipId)).data.ownerUserId != userId;
         allow update, delete: if false;
       }
     }
@@ -94,6 +92,12 @@ service cloud.firestore {
       allow update: if signedIn() && resource.data.recipientId == request.auth.uid &&
         request.resource.data.recipientId == resource.data.recipientId;
       allow delete: if false;
+    }
+
+    match /feedback/{feedbackId} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
     }
 
     match /{document=**} { allow read, write: if false; }

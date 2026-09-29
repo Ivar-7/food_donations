@@ -130,7 +130,6 @@ export async function pledgeToSponsorship(
     );
     if (
       sponsorship.status !== "open" ||
-      sponsorship.ownerUserId === "foodbridge-seed-organization" ||
       sponsorship.pledgedQuantity + quantity > sponsorship.targetQuantity
     )
       throw new Error("The requested quantity is no longer available.");

@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import donationVolunteers from "../../../assets/food-donation-volunteers.jpg";
+import donationVolunteers from "../../../assets/children-receiving-donations.png";
 import { useAuth } from "../../../app/authContext";
 import { firebaseConfigured } from "../../../shared/firebase/client";
 import { signIn, signUp, requestPasswordReset } from "../api/auth.api";
@@ -63,14 +63,14 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
   }
 
   return (
-    <div className="grid min-h-screen bg-stone-100 lg:min-h-0 lg:grid-cols-12 dark:bg-forest-950">
+    <div className="grid min-h-screen bg-stone-100 lg:min-h-0 lg:grid-cols-12 dark:bg-pink-950">
       <div className="relative hidden min-h-screen overflow-hidden lg:col-span-6 lg:block xl:col-span-7">
         <img
           src={donationVolunteers}
-          alt="Volunteers sorting donated food for community distribution"
+          alt="Illustrative image of children and their parent receiving donated groceries"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-950/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-pink-950/90 via-pink-950/10 to-transparent" />
         <div className="absolute bottom-0 left-0 max-w-2xl px-12 pb-16 text-white 2xl:px-20">
           <p className="text-xs font-bold uppercase tracking-widest text-white/80">
             Okoa Food community
@@ -88,12 +88,12 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
         <div className="w-full max-w-xl">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-forest-700 dark:text-forest-500"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-pink-700 dark:text-pink-300"
           >
             <ArrowLeft size={16} /> Back to home
           </Link>
           <div className="mt-12 border-b border-stone-300 pb-7 dark:border-stone-700">
-            <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+            <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
               {resetMode
                 ? "Account help"
                 : signup
@@ -168,7 +168,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-500 hover:text-forest-700 dark:text-stone-400 dark:hover:text-forest-500"
+                    className="absolute inset-y-0 right-0 flex items-center px-4 text-stone-500 hover:text-pink-700 dark:text-stone-400 dark:hover:text-pink-500"
                   >
                     {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
                   </button>
@@ -183,7 +183,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
                   setError("");
                   setSuccess("");
                 }}
-                className="text-sm font-semibold text-forest-700 hover:underline dark:text-forest-500"
+                className="text-sm font-semibold text-pink-700 hover:underline dark:text-pink-300"
               >
                 Forgot password?
               </button>
@@ -220,7 +220,7 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
                   setError("");
                   setSuccess("");
                 }}
-                className="font-bold text-forest-700 dark:text-forest-500"
+                className="font-bold text-pink-700 dark:text-pink-300"
               >
                 Back to log in
               </button>
@@ -228,8 +228,9 @@ export default function AuthPage({ mode }: { mode: "login" | "signup" }) {
               <>
                 {signup ? "Already have an account?" : "New to Okoa Food?"}{" "}
                 <Link
-                  className="ml-1 font-bold text-forest-700 dark:text-forest-500"
+                  className="ml-1 font-bold text-pink-700 dark:text-pink-300"
                   to={signup ? "/login" : "/signup"}
+                  state={{ from }}
                 >
                   {signup ? "Log in" : "Create an account"}
                 </Link>

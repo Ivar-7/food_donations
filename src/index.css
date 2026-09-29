@@ -5,14 +5,6 @@
 @theme {
   --font-sans: "Aptos", "Segoe UI", sans-serif;
   --font-display: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --color-forest-50: #f3f8f2;
-  --color-forest-100: #e3f0df;
-  --color-forest-500: #39845c;
-  --color-forest-600: #286d48;
-  --color-forest-700: #185739;
-  --color-forest-800: #123f2c;
-  --color-forest-900: #102d22;
-  --color-forest-950: #0a2018;
 }
 
 @layer base {
@@ -25,7 +17,7 @@
     min-height: 100%;
   }
   body {
-    @apply m-0 bg-stone-50 font-sans text-stone-900 antialiased dark:bg-forest-950 dark:text-stone-100;
+    @apply m-0 bg-pink-50/50 font-sans text-stone-900 antialiased dark:bg-stone-950 dark:text-stone-100;
   }
   button {
     @apply cursor-pointer;
@@ -36,9 +28,9 @@
     @apply outline-none;
   }
   ::selection {
-    @apply bg-forest-700 text-white;
+    @apply bg-pink-700 text-white;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-forest-600;
+    @apply outline-2 outline-offset-2 outline-pink-600;
   }
 }

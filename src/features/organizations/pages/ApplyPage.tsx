@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { Building2, CircleCheck, CircleX, Clock3 } from "lucide-react";
 import { useAuth } from "../../../app/authContext";
@@ -81,7 +81,7 @@ export default function ApplyPage() {
       <PageHeader
         eyebrow="Partner with us"
         title="Register your organization"
-        description="Tell us about your shelter or NGO. An administrator will review your application before it appears publicly."
+        description="Register your shelter or NGO to request donations and post community needs. An administrator reviews your application; once approved, you can start asking for support."
       />
       {!firebaseConfigured ? (
         <Notice error>
@@ -95,8 +95,8 @@ export default function ApplyPage() {
         <Notice error>{toAppError(applications.error).message}</Notice>
       ) : profile?.organizationId || activeApplication ? (
         <div className="grid gap-8 lg:grid-cols-5">
-          <section className="border border-stone-200 bg-white p-7 dark:border-stone-800 dark:bg-stone-900 sm:p-10 lg:col-span-3">
-            <div className="flex size-14 items-center justify-center rounded-full bg-forest-100 text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+          <section className="rounded-3xl border border-stone-200 bg-white p-7 dark:border-stone-800 dark:bg-stone-900 sm:p-10 lg:col-span-3">
+            <div className="flex size-14 items-center justify-center rounded-full bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-100">
               {profile?.organizationId ||
               activeApplication?.status === "approved" ? (
                 <CircleCheck size={28} aria-hidden="true" />
@@ -104,7 +104,7 @@ export default function ApplyPage() {
                 <Clock3 size={28} aria-hidden="true" />
               )}
             </div>
-            <p className="mt-7 text-xs font-bold uppercase tracking-widest text-forest-700 dark:text-forest-400">
+            <p className="mt-7 text-xs font-bold uppercase tracking-widest text-pink-700 dark:text-pink-400">
               Application status
             </p>
             <h2 className="mt-2 font-display text-3xl sm:text-4xl">
@@ -116,14 +116,24 @@ export default function ApplyPage() {
             <p className="mt-4 max-w-2xl leading-relaxed text-stone-600 dark:text-stone-400">
               {profile?.organizationId ||
               activeApplication?.status === "approved"
-                ? "Your organization is now listed in the community directory. You can request available donations from your dashboard."
+                ? "Your organization is now listed in the community directory. You can request available donations and publish community needs."
                 : "Thanks for applying. An administrator will review your details, and you'll see the decision here."}
             </p>
+            {profile?.organizationId && (
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link to="/sponsorships/new" className={primaryClass}>
+                  Post a community need
+                </Link>
+                <Link to="/donations" className={primaryClass}>
+                  Request a donation
+                </Link>
+              </div>
+            )}
           </section>
           <aside className="border border-stone-200 bg-stone-50 p-7 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-2">
             <Building2
               size={30}
-              className="text-forest-700 dark:text-forest-400"
+              className="text-pink-700 dark:text-pink-400"
               aria-hidden="true"
             />
             <h3 className="mt-5 font-display text-2xl">
@@ -162,7 +172,7 @@ export default function ApplyPage() {
           )}
           <form
             onSubmit={(event) => void submit(event)}
-            className="max-w-4xl space-y-5 border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:p-10"
+            className="max-w-4xl space-y-5 rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:p-10"
           >
             <label className="block text-sm font-semibold">
               Organization name

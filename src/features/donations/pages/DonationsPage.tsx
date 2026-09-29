@@ -41,7 +41,7 @@ export default function DonationsPage() {
             key={value}
             type="button"
             onClick={() => setCategory(value)}
-            className={`rounded-full px-5 py-2 text-sm font-semibold ${category === value ? "bg-forest-700 text-white" : "border border-stone-200 bg-white text-stone-600 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"}`}
+            className={`rounded-full px-5 py-2 text-sm font-semibold ${category === value ? "bg-pink-700 text-white" : "border border-stone-200 bg-white text-stone-600 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300"}`}
           >
             {value}
           </button>
@@ -71,7 +71,7 @@ export default function DonationsPage() {
           <button
             type="button"
             onClick={() => void refetch()}
-            className="text-sm font-bold text-forest-700 underline dark:text-forest-500"
+            className="text-sm font-bold text-pink-700 underline dark:text-pink-300"
           >
             Try again
           </button>

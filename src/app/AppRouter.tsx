@@ -52,6 +52,9 @@ const DashboardPage = lazy(
   () => import("../features/dashboard/pages/DashboardPage"),
 );
 const AboutPage = lazy(() => import("../features/home/pages/AboutPage"));
+const FeedbackPage = lazy(
+  () => import("../features/feedback/pages/FeedbackPage"),
+);
 
 function Protected({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -66,10 +69,11 @@ function Protected({ children }: { children: React.ReactNode }) {
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return null;
 }
 
@@ -81,6 +85,7 @@ export default function AppRouter() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/donations" element={<DonationsPage />} />
           <Route
             path="/donations/:donationId"

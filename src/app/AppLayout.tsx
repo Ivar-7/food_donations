@@ -1,5 +1,13 @@
 import { Suspense, useState } from "react";
-import { ArrowUpRight, Bell, Menu, Moon, Sprout, Sun, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  Bell,
+  HeartHandshake,
+  Menu,
+  Moon,
+  Sun,
+  X,
+} from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "./authContext";
@@ -14,6 +22,7 @@ const nav = [
   { to: "/organizations", label: "Organizations" },
   { to: "/sponsorships", label: "Community needs" },
   { to: "/about", label: "How it works" },
+  { to: "/feedback", label: "Feedback" },
 ];
 
 function Brand() {
@@ -23,10 +32,10 @@ function Brand() {
       className="inline-flex shrink-0 items-center gap-3"
       aria-label="Okoa Food home"
     >
-      <span className="flex size-10 items-center justify-center rounded-full bg-forest-700 text-white dark:bg-forest-500 dark:text-forest-950">
-        <Sprout size={22} strokeWidth={2.2} aria-hidden="true" />
+      <span className="flex size-10 items-center justify-center rounded-full bg-pink-700 text-white dark:bg-pink-500 dark:text-pink-950">
+        <HeartHandshake size={22} strokeWidth={2.2} aria-hidden="true" />
       </span>
-      <span className="text-xl font-bold tracking-tight text-forest-950 dark:text-stone-50">
+      <span className="text-xl font-bold tracking-tight text-pink-950 dark:text-stone-50">
         Okoa<span className="font-normal"> Food</span>
       </span>
     </Link>
@@ -55,11 +64,11 @@ export default function AppLayout() {
   }
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
-    `text-sm font-semibold transition-colors hover:text-forest-700 dark:hover:text-forest-100 ${isActive ? "text-forest-700 dark:text-forest-100" : "text-stone-600 dark:text-stone-300"}`;
+    `text-sm font-semibold transition-colors hover:text-pink-700 dark:hover:text-pink-100 ${isActive ? "text-pink-700 dark:text-pink-100" : "text-stone-600 dark:text-stone-300"}`;
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-30 border-b border-stone-200 bg-stone-50/95 backdrop-blur dark:border-stone-800 dark:bg-forest-950/95">
+      <header className="sticky top-0 z-30 border-b border-pink-100 bg-white/95 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95">
         <div className="flex w-full items-center justify-between gap-6 px-4 py-3 sm:px-8 lg:px-12 2xl:px-20">
           <Brand />
           <nav
@@ -91,7 +100,7 @@ export default function AppLayout() {
                 >
                   <Bell size={19} />
                   {unreadCount > 0 && (
-                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-forest-700 text-xs font-bold text-white">
+                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-pink-700 text-xs font-bold text-white">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -105,7 +114,7 @@ export default function AppLayout() {
                 <button
                   type="button"
                   onClick={() => void handleLogout()}
-                  className="text-sm font-semibold text-stone-600 hover:text-forest-700 dark:text-stone-300 dark:hover:text-forest-400"
+                  className="text-sm font-semibold text-stone-600 hover:text-pink-700 dark:text-stone-300 dark:hover:text-pink-400"
                 >
                   Sign out
                 </button>
@@ -132,7 +141,7 @@ export default function AppLayout() {
               >
                 <Bell size={20} />
                 {unreadCount > 0 && (
-                  <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-forest-700 text-xs font-bold text-white">
+                  <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-pink-700 text-xs font-bold text-white">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
@@ -154,7 +163,7 @@ export default function AppLayout() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              className="rounded-full border border-stone-300 p-2.5 text-forest-800 dark:border-stone-700 dark:text-stone-100"
+              className="rounded-full border border-stone-300 p-2.5 text-pink-800 dark:border-stone-700 dark:text-stone-100"
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
@@ -164,7 +173,7 @@ export default function AppLayout() {
           <nav
             id="mobile-menu"
             aria-label="Mobile navigation"
-            className="border-t border-stone-200 bg-stone-50 px-4 pb-5 pt-3 dark:border-stone-800 dark:bg-forest-950 sm:px-8 2xl:hidden"
+            className="border-t border-stone-200 bg-stone-50 px-4 pb-5 pt-3 dark:border-stone-800 dark:bg-pink-950 sm:px-8 2xl:hidden"
           >
             <div className="flex flex-col gap-1">
               {nav.map((item) => (
@@ -172,7 +181,7 @@ export default function AppLayout() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 hover:bg-forest-50 dark:text-stone-100 dark:hover:bg-forest-900"
+                  className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 hover:bg-pink-50 dark:text-stone-100 dark:hover:bg-pink-900"
                 >
                   {item.label}
                 </NavLink>
@@ -182,28 +191,28 @@ export default function AppLayout() {
                   <NavLink
                     to="/dashboard"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                    className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                   >
                     Dashboard
                   </NavLink>
                   <NavLink
                     to="/profile"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                    className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                   >
                     My profile
                   </NavLink>
                   <NavLink
                     to="/orders"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                    className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                   >
                     Donation requests
                   </NavLink>
                   <NavLink
                     to="/notifications"
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                    className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                   >
                     Notifications{unreadCount > 0 ? ` (${unreadCount})` : ""}
                   </NavLink>
@@ -211,7 +220,7 @@ export default function AppLayout() {
                     <NavLink
                       to="/admin/applications"
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                      className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                     >
                       Review applications
                     </NavLink>
@@ -219,7 +228,7 @@ export default function AppLayout() {
                   <button
                     type="button"
                     onClick={() => void handleLogout()}
-                    className="rounded-lg px-3 py-3 text-left text-base font-semibold text-stone-700 dark:text-stone-100"
+                    className="rounded-2xl px-3 py-3 text-left text-base font-semibold text-stone-700 dark:text-stone-100"
                   >
                     Sign out
                   </button>
@@ -228,7 +237,7 @@ export default function AppLayout() {
                 <NavLink
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
+                  className="rounded-2xl px-3 py-3 text-base font-semibold text-stone-700 dark:text-stone-100"
                 >
                   Log in
                 </NavLink>
@@ -273,7 +282,7 @@ export default function AppLayout() {
           </Suspense>
         </motion.main>
       </AnimatePresence>
-      <footer className="border-t border-stone-200 bg-stone-100 dark:border-stone-800 dark:bg-forest-950">
+      <footer className="border-t border-stone-200 bg-stone-100 dark:border-stone-800 dark:bg-pink-950">
         <div className="grid gap-8 px-4 py-10 sm:px-8 md:grid-cols-2 lg:px-12 2xl:px-20">
           <div>
             <Brand />
@@ -285,27 +294,33 @@ export default function AppLayout() {
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-stone-600 dark:text-stone-300 md:justify-end">
             <Link
               to="/donations"
-              className="hover:text-forest-700 dark:hover:text-forest-400"
+              className="hover:text-pink-700 dark:hover:text-pink-400"
             >
               Explore donations
             </Link>
             <Link
               to="/organizations"
-              className="hover:text-forest-700 dark:hover:text-forest-400"
+              className="hover:text-pink-700 dark:hover:text-pink-400"
             >
               Organizations
             </Link>
             <Link
               to="/sponsorships"
-              className="hover:text-forest-700 dark:hover:text-forest-400"
+              className="hover:text-pink-700 dark:hover:text-pink-400"
             >
               Community needs
             </Link>
             <Link
               to="/about"
-              className="hover:text-forest-700 dark:hover:text-forest-400"
+              className="hover:text-pink-700 dark:hover:text-pink-400"
             >
               How it works
+            </Link>
+            <Link
+              to="/feedback"
+              className="hover:text-pink-700 dark:hover:text-pink-300"
+            >
+              Feedback
             </Link>
           </div>
         </div>

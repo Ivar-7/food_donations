@@ -82,7 +82,7 @@ export default function OrderPage() {
         action={
           <Link
             to="/orders"
-            className="inline-flex items-center gap-2 text-sm font-bold text-forest-700 dark:text-forest-500"
+            className="inline-flex items-center gap-2 text-sm font-bold text-pink-700 dark:text-pink-300"
           >
             <ArrowLeft size={16} /> All requests
           </Link>
@@ -101,11 +101,11 @@ export default function OrderPage() {
         />
       ) : (
         <div className="grid gap-8 lg:grid-cols-12">
-          <section className="border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-7">
+          <section className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8 lg:col-span-7">
             <div className="flex items-center gap-3">
               <PackageCheck
                 size={25}
-                className="text-forest-700 dark:text-forest-500"
+                className="text-pink-700 dark:text-pink-300"
               />
               <h2 className="font-display text-3xl">Handoff progress</h2>
             </div>
@@ -114,7 +114,7 @@ export default function OrderPage() {
                 <div key={step.status} className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <span
-                      className={`flex size-9 items-center justify-center rounded-full border text-sm font-bold ${index <= currentStep ? "border-forest-700 bg-forest-700 text-white" : "border-stone-300 text-stone-500 dark:border-stone-700 dark:text-stone-400"}`}
+                      className={`flex size-9 items-center justify-center rounded-full border text-sm font-bold ${index <= currentStep ? "border-pink-700 bg-pink-700 text-white" : "border-stone-300 text-stone-500 dark:border-stone-700 dark:text-stone-400"}`}
                     >
                       {index < currentStep ? <Check size={17} /> : index + 1}
                     </span>
@@ -164,11 +164,11 @@ export default function OrderPage() {
             )}
           </section>
           <aside className="space-y-6 lg:col-span-5">
-            <div className="border border-stone-200 bg-forest-50 p-6 dark:border-forest-800 dark:bg-forest-900 sm:p-8">
-              <p className="text-xs font-bold uppercase tracking-widest text-forest-700 dark:text-forest-100">
+            <div className="border border-stone-200 bg-pink-50 p-6 dark:border-pink-800 dark:bg-pink-900 sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-pink-700 dark:text-pink-100">
                 Pickup reference
               </p>
-              <p className="mt-3 font-display text-5xl tracking-widest text-forest-950 dark:text-white">
+              <p className="mt-3 font-display text-5xl tracking-widest text-pink-950 dark:text-white">
                 {order.pickupCode}
               </p>
               <p className="mt-4 text-sm leading-relaxed text-stone-600 dark:text-stone-300">
@@ -176,7 +176,7 @@ export default function OrderPage() {
                 identifies this request; it is not a payment or delivery code.
               </p>
             </div>
-            <div className="border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8">
+            <div className="rounded-3xl border border-stone-200 bg-white p-6 dark:border-stone-800 dark:bg-stone-900 sm:p-8">
               <h2 className="font-display text-2xl">At a glance</h2>
               <dl className="mt-5 space-y-4 text-sm">
                 <div>
@@ -204,7 +204,7 @@ export default function OrderPage() {
               </dl>
               <Link
                 to={`/donations/${order.donationId}`}
-                className="mt-6 inline-block text-sm font-bold text-forest-700 dark:text-forest-500"
+                className="mt-6 inline-block text-sm font-bold text-pink-700 dark:text-pink-300"
               >
                 View donation
               </Link>

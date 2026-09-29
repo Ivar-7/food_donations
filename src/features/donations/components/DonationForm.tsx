@@ -47,18 +47,18 @@ export default function DonationForm({
   return (
     <form
       onSubmit={(event) => void submit(event)}
-      className="border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900 sm:p-8 xl:p-10"
+      className="rounded-3xl border border-stone-200 bg-white p-5 shadow-sm dark:border-stone-800 dark:bg-stone-900 sm:p-8 xl:p-10"
     >
       <div className="mb-8 flex items-center justify-between border-b border-stone-200 pb-6 dark:border-stone-800">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-forest-600 dark:text-forest-500">
+          <p className="text-xs font-bold uppercase tracking-widest text-pink-600 dark:text-pink-300">
             Listing details
           </p>
           <h2 className="mt-2 font-display text-2xl sm:text-3xl">
             Make it easy to collect
           </h2>
         </div>
-        <span className="hidden rounded-full bg-forest-50 px-4 py-2 text-xs font-bold text-forest-700 dark:bg-forest-900 dark:text-forest-100 sm:block">
+        <span className="hidden rounded-full bg-pink-50 px-4 py-2 text-xs font-bold text-pink-700 dark:bg-pink-900 dark:text-pink-100 sm:block">
           Photo optional
         </span>
       </div>

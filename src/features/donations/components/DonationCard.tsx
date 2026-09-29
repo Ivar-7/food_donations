@@ -1,13 +1,14 @@
 import type { Donation } from "../donation.types";
 import { ArrowUpRight, Carrot, MapPin, Package } from "lucide-react";
 import { Link } from "react-router-dom";
+import RequestDonationButton from "../../orders/components/RequestDonationButton";
 
 export default function DonationCard({ donation }: { donation: Donation }) {
   return (
-    <article className="h-full overflow-hidden border border-stone-200 bg-white transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900">
+    <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white transition-shadow hover:shadow-lg dark:border-stone-800 dark:bg-stone-900">
       <Link
         to={`/donations/${donation.id}`}
-        className="group flex h-full flex-col"
+        className="group flex flex-1 flex-col"
       >
         {donation.imageUrl ? (
           <img
@@ -19,7 +20,7 @@ export default function DonationCard({ donation }: { donation: Donation }) {
           />
         ) : (
           <div
-            className={`flex h-44 items-center justify-between px-6 ${donation.category === "Food" ? "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100" : "bg-forest-50 text-forest-800 dark:bg-forest-900 dark:text-forest-100"}`}
+            className={`flex h-44 items-center justify-between px-6 ${donation.category === "Food" ? "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100" : "bg-pink-50 text-pink-800 dark:bg-pink-900 dark:text-pink-100"}`}
             aria-hidden="true"
           >
             <span className="font-display text-3xl">
@@ -35,14 +36,9 @@ export default function DonationCard({ donation }: { donation: Donation }) {
         <div className="flex flex-1 flex-col p-6">
           <div className="flex items-center justify-between gap-3">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-forest-100 px-3 py-1 text-xs font-bold text-forest-700 dark:bg-forest-900 dark:text-forest-100">
+              <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-bold text-pink-700 dark:bg-pink-900 dark:text-pink-100">
                 {donation.category}
               </span>
-              {donation.donorId === "foodbridge-seed-donor" && (
-                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-100">
-                  Sample
-                </span>
-              )}
             </div>
             <span className="text-xs text-stone-500 dark:text-stone-400">
               {new Date(donation.createdAt).toLocaleDateString()}
@@ -60,11 +56,14 @@ export default function DonationCard({ donation }: { donation: Donation }) {
               <Package size={16} aria-hidden="true" /> {donation.quantity}
             </p>
           </div>
-          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-forest-700 group-hover:underline dark:text-forest-500">
+          <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-pink-700 group-hover:underline dark:text-pink-300">
             View details <ArrowUpRight size={16} aria-hidden="true" />
           </span>
         </div>
       </Link>
+      <div className="border-t border-stone-100 px-6 py-4 dark:border-stone-800">
+        <RequestDonationButton donation={donation} />
+      </div>
     </article>
   );
 }
